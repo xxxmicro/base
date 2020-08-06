@@ -2,18 +2,23 @@ package cache
 
 import(
 	"github.com/xxxmicro/base/store"
+	"github.com/xxxmicro/base/store/memory"
 )
 
-type cache {
+type Cache interface {
+	store.Store
+}
+
+type cache struct {
 	m store.Store		// memory store
 	b store.Store		// backing store
 	options store.Options
 }
 
-func NewCache(store store.Store, opts ...store.Option) cache {
+func NewStore(store store.Store, opts ...store.Option) store.Store {
 	return &cache{
 		m: memory.NewStore(opts...),
-		b: store
+		b: store,
 	}
 }
 
@@ -39,7 +44,7 @@ func (c *cache) Options() store.Options {
 	return c.options
 }
 
-func (c *cache) Get(key string, opts ...store.ReadOption) (*store.Record, err error) {
+func (c *cache) Get(key string, opts ...store.ReadOption) (*store.Record, error) {
 	rec, err := c.m.Get(key, opts...)
 	if err != nil && err != store.ErrNotFound {
 		return nil, err
@@ -49,7 +54,7 @@ func (c *cache) Get(key string, opts ...store.ReadOption) (*store.Record, err er
 		return rec, nil
 	}
 
-	rec, err = c.b.Read(key, opts...)
+	rec, err = c.b.Get(key, opts...)
 	if err == nil {
 		if err := c.m.Set(rec); err != nil {
 			return nil, err
@@ -59,14 +64,14 @@ func (c *cache) Get(key string, opts ...store.ReadOption) (*store.Record, err er
 }
 
 func (c *cache) Set(r *store.Record, opts ...store.WriteOption) error {
-	if err := c.m.Write(r, opts...); err != nil {
+	if err := c.m.Set(r, opts...); err != nil {
 		return err
 	}
-	return c.b.Write(r, opts...)
+	return c.b.Set(r, opts...)
 }
 
 func (c *cache) Delete(key string, opts ...store.DeleteOption) error {
-	if err := r.m.Delete(key, opts...); err != nil {
+	if err := c.m.Delete(key, opts...); err != nil {
 		return err
 	}
 	return c.b.Delete(key, opts...)
@@ -85,20 +90,19 @@ func (c *cache) List(opts ...store.ListOption) ([]string, error) {
 	keys, err = c.b.List(opts...)
 	if err == nil {
 		for _, key := range keys {
-			recs, err := range keys {
-				rec, err := c.b.Get(key)
-				if err != nil {
-					return nil, err
-				}
-				if err := c.m.Write(rec); err != nil {
-					return nil, err
-				}
+			rec, err := c.b.Get(key)
+			if err != nil {
+				return nil, err
+			}
+			if err := c.m.Set(rec); err != nil {
+				return nil, err
 			}
 		}
 	}
 	return keys, err
 }
 
+/*
 func (c *cache) Incr(key string) (*store.Record, error) {
 	if err := c.m.Incr(key); err != nil {
 		return err
@@ -106,14 +110,14 @@ func (c *cache) Incr(key string) (*store.Record, error) {
 	return c.b.Incr(key)
 }
 
-func (c *cache) IncrBy(key string, value int64) (*store.Record, err error) {
+func (c *cache) IncrBy(key string, value int64) (*store.Record, error) {
 	if err := c.m.IncrBy(key, value); err != nil {
 		return err
 	}
 	return c.b.IncrBy(key, value)
 }
 
-func (c *cache) Exists(key string, ...opts store.ReadOption) (bool, error) {
+func (c *cache) Exists(key string, opts ...store.ReadOption) (bool, error) {
 	var has bool
 	if has, err := c.m.Exists(key, value); err != nil {
 		return err
@@ -125,7 +129,7 @@ func (c *cache) Exists(key string, ...opts store.ReadOption) (bool, error) {
 
 	return c.b.Exists(key, opts...)
 }
-
+*/
 
 func (c *cache) Close() error {
 	if err := c.m.Close(); err != nil {

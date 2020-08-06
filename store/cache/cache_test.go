@@ -1,29 +1,39 @@
 package cache
 
 import(
-	"os"
-	"path/filepath"
 	"testing"
+	"log"
+	"time"
 	"github.com/xxxmicro/base/store"
+	"github.com/xxxmicro/base/store/redis"
+	"github.com/stretchr/testify/assert"
 )
-
-func cleanup(db string, s store.Store) {
-	s.Close()
-	dir := filepath.Join(file.DefaultDir, db + "/")
-	os.RemoveAll(dir)
-}
 
 func TestGet(t *testing.T) {
 	cf := NewStore(redis.NewStore())
 	cf.Init()
 	cfInt := cf.(*cache)
 
-	_, err := cf.Get("key1")
-	assert.Error(t, err, "Unexpected record")
-	cfInt.b.Write(&store.Record{
+	record := &store.Record{
 		Key: "key1",
 		Value: []byte("foo"),
-	})
-	rec, err := cf.Get("key1")
+		Expiry: time.Millisecond * 1000,
+	}
+
+	err := cf.Delete(record.Key)
 	assert.NoError(t, err)
+
+	r, err := cf.Get("key1")
+	assert.Error(t, err, "Unexpected record")
+	cfInt.b.Set(record)
+
+	time.Sleep(time.Millisecond * 500)
+	r, err = cf.Get("key1")
+	assert.NoError(t, err)
+
+	time.Sleep(time.Millisecond * 2000)
+	r, err = cf.Get(record.Key)
+	assert.Error(t, err, "Expected no records in redis store")
+
+	log.Print(r)
 }
