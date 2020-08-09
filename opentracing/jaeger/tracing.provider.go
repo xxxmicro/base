@@ -29,7 +29,7 @@ func NewTracerProvider(config config.Config) (tracer opentracing.Tracer, err err
 			LogSpans:           true,
 			LocalAgentHostPort: agentAddr,
 		},
-	}).NewTracer(config.Metrics(metricsFactory))
+	}).NewTracer(jconfig.Metrics(metricsFactory))
 
 	if err != nil {
 		err = errors.Wrap(err, "create jaeger tracer error")
