@@ -19,7 +19,7 @@ func NewDbProvider(config config.Config) (*gorm.DB, error) {
 	}
 
 	if len(connectionString) == 0 {
-		return nil, errors.New("connectionString is empty")
+		return nil, errors.New("connection_string is empty")
 	}
 
 	db, err := gorm.Open(driver, connectionString)
