@@ -6,12 +6,13 @@ import(
 	"github.com/micro/go-micro/v2/config/source"
 	"github.com/xxxmicro/go-micro-apollo-plugin"
 	"github.com/xxxmicro/base/log"
+	"github.com/xxxmicro/base/config"
 )
 
 func NewSourceProvider(c *cli.Context) source.Source {
 	address := c.String("apollo_address")
 	if len(address) == 0 {
- 		address = Env("APOLLO_ADDRESS", "")
+ 		address = config.Env("APOLLO_ADDRESS", "")
 	}
 
 	if len(address) == 0 {
@@ -21,20 +22,20 @@ func NewSourceProvider(c *cli.Context) source.Source {
 		
 	namespace := c.String("namespace")
 	if len(namespace) == 0 {
- 		namespace = Env("APOLLO_NAMESPACE", "application")
+ 		namespace = config.Env("APOLLO_NAMESPACE", "application")
 	}
 
 	appId := c.String("apollo_app_id")
 	if len(appId) == 0 {
- 		appId = Env("APOLLO_APPID", "xpay-api")
+ 		appId = config.Env("APOLLO_APPID", "xpay-api")
 	}
 
 	cluster := c.String("apollo_cluster")
 	if len(cluster) == 0 {
- 		cluster = Env("APOLLO_CLUSTER", "dev")
+ 		cluster = config.Env("APOLLO_CLUSTER", "dev")
 	}
 
-	backupConfigPath := Env("BACKUP_CONFIG_PATH", "./")
+	backupConfigPath := config.Env("BACKUP_CONFIG_PATH", "./")
 
 	e := yaml.NewEncoder()
 	return apollo.NewSource(
