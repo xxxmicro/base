@@ -9,8 +9,8 @@ import(
 )
 
 func NewDbProvider(config config.Config) (*_gorm.DB, error) {
-	driver := config.Get("db", "driver").String()
-	connectionString := config.Get("db", "connectionString").String()
+	driver := config.Get("db", "driver").String("")
+	connectionString := config.Get("db", "connectionString").String("")
 
 	if len(driver) == 0 {
 		return nil, errors.New("driver is empty")
