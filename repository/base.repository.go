@@ -4,7 +4,7 @@ import(
 	"context"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/database/gorm"
-	"github.com/xxxmicro/base/database/models"
+	"github.com/xxxmicro/base/repository/models"
 )
 
 type BaseRepository interface {
