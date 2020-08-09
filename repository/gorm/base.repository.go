@@ -12,7 +12,7 @@ type baseRepository struct {
 	db *_gorm.DB
 }
 
-func NewBaseRepositoryImpl(db *_gorm.DB) repository.BaseRepository {
+func NewBaseRepository(db *_gorm.DB) repository.BaseRepository {
 	return &baseRepository{ db }
 }
 
