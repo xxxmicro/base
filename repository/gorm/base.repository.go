@@ -4,6 +4,7 @@ import(
 	"context"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/database/gorm"
+	"github.com/xxxmicro/base/repository"
 	"github.com/xxxmicro/base/repository/models"
 )
 
@@ -11,7 +12,7 @@ type baseRepository struct {
 	db *_gorm.DB
 }
 
-func NewBaseRepositoryImpl(db *_gorm.DB) BaseRepository {
+func NewBaseRepositoryImpl(db *_gorm.DB) repository.BaseRepository {
 	return &baseRepository{ db }
 }
 
