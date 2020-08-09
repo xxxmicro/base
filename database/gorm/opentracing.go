@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-
 	"github.com/jinzhu/gorm"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
