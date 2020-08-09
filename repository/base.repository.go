@@ -13,24 +13,28 @@ type BaseRepository interface {
 	FindOne(c context.Context, id interface{}, model models.Model) error	
 }
 
-type BaseRepositoryImpl struct {
+type baseRepository struct {
 	db *_gorm.DB
 }
 
-func (r *BaseRepositoryImpl) Create(c context.Context, model models.Model) error {
+func NewBaseRepositoryImpl(db *_gorm.DB) BaseRepository {
+	return &baseRepository{ db }
+}
+
+func (r *baseRepository) Create(c context.Context, model models.Model) error {
 	db := gorm.SetSpanToGorm(c, r.db)
 
 	model.GenerateID()
 	return db.Table(model.GetTable()).Create(model).Error
 }
 
-func (r *BaseRepositoryImpl) Update(context context.Context, id interface{}, model models.Model) error {
+func (r *baseRepository) Update(context context.Context, id interface{}, model models.Model) error {
 	db := gorm.SetSpanToGorm(context, r.db)
 
 	return db.Table(model.GetTable()).Where("id=?", id).Save(model).Error
 }
 
-func (r *BaseRepositoryImpl) FindOne(context context.Context, id interface{}, model models.Model) error {
+func (r *baseRepository) FindOne(context context.Context, id interface{}, model models.Model) error {
 	db := gorm.SetSpanToGorm(context, r.db)
 
 	return db.Table(model.GetTable()).Where("id=?", id).Take(model).Error
