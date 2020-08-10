@@ -11,7 +11,7 @@ import(
 
 func NewTracerProvider(config config.Config) (tracer opentracing.Tracer, err error) {
 	serviceName := config.Get("service", "name").String("service")
-	
+
 	agentAddr := config.Get("jaeger", "agent", "addr").String("localhost:6831")
 	
 	metricsFactory := prometheus.New()
