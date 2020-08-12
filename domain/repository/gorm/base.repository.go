@@ -2,6 +2,7 @@ package gorm
 
 import(
 	"context"
+	"errors"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/database/gorm"
 	"github.com/xxxmicro/base/domain/repository"
@@ -26,13 +27,13 @@ func (r *baseRepository) Create(c context.Context, m model.Model) error {
 func (r *baseRepository) Update(c context.Context, m model.Model) error {
 	db := gorm.SetSpanToGorm(c, r.db)
 
-	return db.Model(m).Save(m).Error
+	return db.Save(m).Error
 }
 
 func (r *baseRepository) FindOne(c context.Context, condition interface{}, m model.Model) error {
 	db := gorm.SetSpanToGorm(c, r.db)
 
-	return db.Model(m).Where(condition).Take(m).Error
+	return db.Where(condition).Take(m).Error
 }
 
 func (r *baseRepository) Delete(c context.Context, m model.Model) error {
@@ -69,6 +70,61 @@ func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model
 	return
 }
 
-func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model) (cursor *model.Cursor, err error) {
+func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
+	ms := r.db.NewScope(m).GetModelStruct()
+
+	dbHandler := r.db.Model(m)
+	dbHandler, err = buildQuery(dbHandler, ms, query.Filters)
+	if err != nil {
+		return
+	}
+
+	dbHandler, reverse, err := GormCursorFilter(dbHandler, ms, query)
+	if err != nil {
+		return
+	}
+
+	// items := breflect.MakeSlicePtr(m, 0, 0)
+
+	if err = dbHandler.Limit(query.Size).Find(resultPtr).Error; err != nil {
+		return
+	}
+
+	if reverse {
+		breflect.SlicePtrReverse(resultPtr)
+	}
+
+	var minCursor interface{} = nil
+	var maxCursor interface{} = nil
+
+	count := breflect.SlicePtrLen(resultPtr)
+	if count > 0 {
+		minItem := breflect.SlicePtrIndexOf(resultPtr, 0)
+		field, ok := FindColumn(query.CursorSort.Property, ms, dbHandler)
+		if !ok {
+			err = errors.New("field not found")
+			return
+		}
+		
+		minCursor, err = breflect.GetStructField(minItem, field.Name)
+		if err != nil {
+			return
+		}
+
+		maxItem := breflect.SlicePtrIndexOf(resultPtr, count-1)
+		maxCursor, err = breflect.GetStructField(maxItem, field.Name)
+		if err != nil {
+			return
+		}
+	}
+
+	extra = &model.CursorExtra{
+		Direction: query.Direction,
+		Size:      query.Size,
+		HasMore:   count == query.Size,
+		MinCursor: minCursor,
+		MaxCursor: maxCursor,
+	}
+
 	return
 }

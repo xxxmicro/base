@@ -1,9 +1,11 @@
 package reflect
 
 import (
+	"fmt"
 	"bytes"
 	"encoding/json"
 	"reflect"
+	"errors"
 )
 
 // 将string转化为结构
@@ -102,4 +104,21 @@ func DereferencePtr(ptr interface{}) interface{} {
 // 解引用指向slice的指针
 func DereferencePtrToSlice(ptr interface{}) []interface{} {
 	return ToSlice(reflect.Indirect(reflect.ValueOf(ptr)).Interface())
+}
+
+func indirectValue(reflectValue reflect.Value) reflect.Value {
+	for reflectValue.Kind() == reflect.Ptr {
+		reflectValue = reflectValue.Elem()
+	}
+	return reflectValue
+}
+
+func GetStructField(v interface{}, fieldName string) (reflect.Value, error) {
+	field := indirectValue(reflect.ValueOf(v)).FieldByName(fieldName)
+
+	if !field.IsValid() || !field.CanSet() {
+		return reflect.Value{}, errors.New(fmt.Sprintf("ErrInvalid %s", v))
+	}
+
+	return field, nil
 }

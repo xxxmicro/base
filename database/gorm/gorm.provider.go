@@ -24,7 +24,7 @@ func NewDbProvider(config config.Config) (*gorm.DB, error) {
 
 	db, err := gorm.Open(driver, connectionString)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	// defer db.Close()

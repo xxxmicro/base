@@ -37,3 +37,23 @@ const (
 	FilterType_ES_GTE_FILTER    FilterType = "GTE_FILTER"    // 大于等于
 	FilterType_ES_GT_FILTER     FilterType = "GT_FILTER"     // 大于
 )
+
+type TimeType string // 数据库的时间类型
+const (
+        DATETIME      TimeType = "datetime" // 时间类型 time.Time
+        TIMESTAMP 		TimeType = "timestamp" // 时间戳 int64
+)
+
+type SortType string
+
+const (
+        SortType_DEFAULT SortType = "DEFAULT"
+        SortType_ASC     SortType = "ASC" // 升序
+        SortType_DSC     SortType = "DSC" // 降序
+)
+
+type SortSpec struct {
+	Property   string   `json:"property"`   // 属性名
+	Type       SortType `json:"type"`       // 排序类型
+	IgnoreCase bool     `json:"ignoreCase"` // 忽略大小写
+}

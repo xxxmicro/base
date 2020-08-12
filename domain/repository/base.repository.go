@@ -27,5 +27,5 @@ type BaseRepository interface {
 	// 游标查询
 	// query: 查询条件
 	// bean: 数据指针，仅用于帮助推导数据类型
-	Cursor(c context.Context, query *model.CursorQuery, m model.Model) (cursor *model.Cursor, err error)
+	Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (cursor *model.CursorExtra, err error)
 }
