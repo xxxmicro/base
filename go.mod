@@ -20,7 +20,7 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible
-	github.com/xxxmicro/go-micro-apollo-plugin v1.0.4
+	github.com/xxxmicro/go-micro-apollo-plugin v1.1.4
 	go.uber.org/zap v1.13.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	xorm.io/xorm v1.0.3
