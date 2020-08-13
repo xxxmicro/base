@@ -48,7 +48,7 @@ func Info(f string) {
 }
 
 func Fatal(f string, args ...interface{}) {
-	
+	log.Panic(f)
 }
 
 func Panic(f string) {

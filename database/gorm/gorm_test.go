@@ -35,13 +35,12 @@ func TestGorm(t *testing.T) {
 		return 
 	}
 
-	closer, err := jaeger.NewTracerProvider(config)
+	tracer, err := jaeger.NewTracerProvider(config)
 	if err != nil {
 		t.Fatal(err)
 		return 
 	}
-
-	t.Log(closer)
+	t.Log(tracer)
 
 	db, err := gorm.NewDbProvider(config)
 	if err != nil {

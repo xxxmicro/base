@@ -1,15 +1,14 @@
-package gorm
+package mongo
 
 import(
 	"testing"
 	"encoding/json"
 	"time"
 	"context"
-	"github.com/satori/go.uuid"
+	"gopkg.in/mgo.v2/bson"
 	"github.com/xxxmicro/base/log"
-	"github.com/xxxmicro/base/database/gorm"
 	"github.com/xxxmicro/base/domain/model"
-	_gorm "github.com/jinzhu/gorm"
+	"github.com/xxxmicro/base/database/mongo"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/memory"
 	"github.com/stretchr/testify/assert"
@@ -20,17 +19,21 @@ func init() {
 }
 
 type User struct {
-	ID	string				`json:"id"`
-	Name string				`json:"name"`
-	Age int 				`json:"age"`
-	Ctime time.Time 		`json:"ctime"`
-	Mtime time.Time 		`json:"mtime"`
-	Dtime time.Time 		`json:"dtime"`
+	ID	bson.ObjectId		`bson:"_id"`
+	Name string				`bson:"name"`
+	Age int 				`bson:"age"`
+	Ctime time.Time 		`bson:"ctime"`
+	Mtime time.Time 		`bson:"mtime"`
+	Dtime time.Time 		`bson:"dtime"`
 }
 
 func (u *User) Unique() interface{} {
-	return u
+	return bson.M{
+		"_id": u.ID,
+	}
 }
+
+
 
 func getConfig() (config.Config, error) {
 	config, err := config.NewConfig()
@@ -39,9 +42,11 @@ func getConfig() (config.Config, error) {
 	}
 
 	data := []byte(`{
-		"db": {
-			"driver": "mysql",
-			"connection_string": "root:root@tcp(localhost:3306)/uim?charset=utf8mb4&parseTime=True&loc=Local"
+		"mongo": {
+			"addrs": [
+				"localhost:27017"
+			],
+			"database": "uim"
 		}
 	}`)
 	source := memory.NewSource(memory.WithJSON(data))
@@ -54,8 +59,8 @@ func getConfig() (config.Config, error) {
 	return config, nil
 }
 
-func getDB(config config.Config) (*_gorm.DB, error) {
-	db, err := gorm.NewDbProvider(config)
+func getDB(config config.Config) (*mongo.DB, error) {
+	db, err := mongo.NewMongoProvider(config)
 	if err != nil {
 		log.Panic("数据库连接失败")
 		return nil, err
@@ -77,21 +82,20 @@ func TestCrud(t *testing.T) {
 		return
 	}
 
-	db.AutoMigrate(&User{})
-	log.Info("创建数据表完毕")
-
+	// db.AutoMigrate(&User{})
+	// log.Info("创建数据表完毕")
 
 
 	userRepo := NewBaseRepository(db)
 
 	user1 := &User{
-		ID: uuid.NewV4().String(),
+		ID: bson.NewObjectId(),
 		Name: "吕布",
 		Age: 28,
 	}
 	
 	user2 := &User{
-		ID: uuid.NewV4().String(),
+		ID: bson.NewObjectId(),
 		Name: "貂蝉",
 		Age: 21,
 	}
@@ -99,9 +103,17 @@ func TestCrud(t *testing.T) {
 	{
 		err := userRepo.Create(context.Background(), user1)
 		assert.NoError(t, err)
+		if err != nil {
+			log.Fatal("插入记录失败")
+			return
+		}
 
 		err = userRepo.Create(context.Background(), user2)
 		assert.NoError(t, err)
+		if err != nil {
+			log.Fatal("插入记录失败")
+			return
+		}
 
 		log.Info("插入记录成功")
 	}
@@ -114,9 +126,14 @@ func TestCrud(t *testing.T) {
 	}
 
 	{
-		findUser := &User{ ID: user1.ID }
+		findUser := &User{ID: user1.ID }
 		err := userRepo.FindOne(context.Background(), findUser)
 		assert.NoError(t, err)
+		if err != nil {
+			log.Info("查找记录失败")
+			t.Fatal(err)
+			return
+		}
 		t.Log(findUser)
 		log.Info("找到对应记录")
 	}
@@ -188,7 +205,7 @@ func TestCrud(t *testing.T) {
 		err = userRepo.Delete(context.Background(), &User{ID: user2.ID})
 		assert.NoError(t, err)
 		if err != nil {
-			log.Fatal("删除记录失败")	
+			log.Fatal("删除记录失败")			
 			return
 		}
 		log.Info("删除记录成功")

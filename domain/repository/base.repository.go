@@ -10,18 +10,16 @@ type BaseRepository interface {
 
 	Update(c context.Context, m model.Model) error
 
-	FindOne(c context.Context, id interface{}, m model.Model) error
+	FindOne(c context.Context, m model.Model) error
 	
 	// 翻页查询
 	// query: 查询条件
-	// bean: 数据指针，仅用于帮助推导数据类型
-	Page(c context.Context, query *model.PageQuery, m model.Model) (page *model.Page, err error)
+	// m: 数据指针，仅用于帮助推导数据类型
+	Page(c context.Context, query *model.PageQuery, m model.Model, resultPtr interface{}) (total int, pageCount int, err error)
 
 	// 根据主键删除数据
 	// id: 主键值
-	// bean: 数据指针，仅用于帮助推导数据类型
-	// has: 数据是否存在
-	// err: 异常信息
+	// m: 数据指针，仅用于帮助推导数据类型
 	Delete(c context.Context, m model.Model) error
 
 	// 游标查询

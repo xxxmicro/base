@@ -54,7 +54,7 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 	switch filterType {
 	case model.FilterType_AND:
 		{
-			/* TODO
+			/* TODO 暂时默认就是 AND
 			subFilters := v.([]interface{})
 			for _, item := range subFilters {
 				db = buildQuery(db, subFilter, ms)
@@ -62,7 +62,7 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 		}
 	case model.FilterType_OR:
 		{
-			/* TODO
+			/* TODO  暂时不支持 page 中支持 or
 			for _, item := range subFilters {
 				db := buildQuery(db, subFilter, ms)
 				orCond = orCond.Or(subCond)
