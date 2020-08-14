@@ -69,5 +69,14 @@ func NewMongoProvider(config config.Config) (*DB, error) {
 	}
 	globalSession.SetMode(mgo.Mode(mode), true)
 
-	return &DB{ Name: database, Session: globalSession }, nil
+
+	db := &DB{ Name: database, Session: globalSession }	
+
+	go watchConfigChange(config, db)
+	
+	return db, nil
+}
+
+func watchConfigChange(config config.Config, db *DB) {
+	// TODO
 }

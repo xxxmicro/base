@@ -7,7 +7,7 @@ import(
 	"github.com/xxxmicro/base/domain/model"
 )
 
-func GormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *model.CursorQuery) (*_gorm.DB, bool, error) {
+func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *model.CursorQuery) (*_gorm.DB, bool, error) {
 	var orderBy string
 	var reverse bool
 
