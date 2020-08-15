@@ -20,9 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0da5df08-d45a-45d0-9f0d-db0601aad3a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/database/gorm/gorm.provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/gorm/gorm.provider.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/gorm/gorm_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/gorm/gorm_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/gorm/opentracing.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/gorm/opentracing/opentracing.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/base.repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/base.repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/repository/gorm/base.repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/base.repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/repository/gorm/cursor_utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/cursor_utils.go" afterDir="false" />
@@ -132,38 +131,38 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1754" height="470" key="GridCell.Tab.0.bottom" timestamp="1597493705886">
+    <state width="1754" height="470" key="GridCell.Tab.0.bottom" timestamp="1597495183971">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493705886" />
-    <state width="1754" height="470" key="GridCell.Tab.0.center" timestamp="1597493705885">
+    <state width="1754" height="470" key="GridCell.Tab.0.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183971" />
+    <state width="1754" height="470" key="GridCell.Tab.0.center" timestamp="1597495183970">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493705885" />
-    <state width="1754" height="470" key="GridCell.Tab.0.left" timestamp="1597493705884">
+    <state width="1754" height="470" key="GridCell.Tab.0.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183970" />
+    <state width="1754" height="470" key="GridCell.Tab.0.left" timestamp="1597495183969">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493705884" />
-    <state width="1754" height="470" key="GridCell.Tab.0.right" timestamp="1597493705885">
+    <state width="1754" height="470" key="GridCell.Tab.0.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183969" />
+    <state width="1754" height="470" key="GridCell.Tab.0.right" timestamp="1597495183971">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493705885" />
-    <state width="1754" height="470" key="GridCell.Tab.1.bottom" timestamp="1597493703887">
+    <state width="1754" height="470" key="GridCell.Tab.0.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183971" />
+    <state width="1754" height="470" key="GridCell.Tab.1.bottom" timestamp="1597495183883">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493703887" />
-    <state width="1754" height="470" key="GridCell.Tab.1.center" timestamp="1597493703886">
+    <state width="1754" height="470" key="GridCell.Tab.1.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183883" />
+    <state width="1754" height="470" key="GridCell.Tab.1.center" timestamp="1597495183882">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493703886" />
-    <state width="1754" height="470" key="GridCell.Tab.1.left" timestamp="1597493703886">
+    <state width="1754" height="470" key="GridCell.Tab.1.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183882" />
+    <state width="1754" height="470" key="GridCell.Tab.1.left" timestamp="1597495183881">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493703886" />
-    <state width="1754" height="470" key="GridCell.Tab.1.right" timestamp="1597493703886">
+    <state width="1754" height="470" key="GridCell.Tab.1.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183881" />
+    <state width="1754" height="470" key="GridCell.Tab.1.right" timestamp="1597495183882">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597493703886" />
+    <state width="1754" height="470" key="GridCell.Tab.1.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597495183882" />
     <state x="2318" y="274" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1597492553216">
       <screen x="1680" y="-12" width="2560" height="1337" />
     </state>
@@ -173,5 +172,16 @@
     </state>
     <state x="2421" y="299" width="615" height="694" key="find.popup/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597492263325" />
     <state x="2421" y="318" width="615" height="735" key="find.popup/1680.-12.2560.1417/0.23.1680.965@1680.-12.2560.1417" timestamp="1597489747112" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go</url>
+          <line>131</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

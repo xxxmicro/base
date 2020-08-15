@@ -15,7 +15,7 @@ var (
 )
 
 // 约定 name为小写
-func FindColumn(name string, ms *_gorm.ModelStruct, dbHandler *_gorm.DB) (*_gorm.StructField, bool) {
+func FindField(name string, ms *_gorm.ModelStruct, dbHandler *_gorm.DB) (*_gorm.StructField, bool) {
 	name = strings.ToLower(name)
 
 	tableName := ms.TableName(dbHandler)
@@ -73,7 +73,7 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 		}
 	default:
 		{
-			field, ok := FindColumn(key, ms, db)
+			field, ok := FindField(key, ms, db)
 			if !ok {
 				err := errors.New(fmt.Sprintf("ERR_DB_UNKNOWN_FIELD %s", key))
 				return nil, err
@@ -185,7 +185,7 @@ func buildSort(dbHandler *_gorm.DB, ms *_gorm.ModelStruct, sorts []*model.SortSp
 
 	for _, sort := range sorts {
 		sortKey := sort.Property
-		if _, ok := FindColumn(sortKey, ms, dbHandler); !ok {
+		if _, ok := FindField(sortKey, ms, dbHandler); !ok {
 			err = errors.New(fmt.Sprintf("unknown field: %s", sortKey))
 			return
 		}

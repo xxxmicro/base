@@ -15,7 +15,7 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 
 	sortKey := query.CursorSort.Property
 	
-	field, ok := FindColumn(sortKey, ms, queryHandler);
+	field, ok := FindField(sortKey, ms, queryHandler);
 	if !ok {
 		err := errors.New(fmt.Sprintf("ERR_DB_UNKNOWN_FIELD %s", sortKey))
 		return nil, reverse, err

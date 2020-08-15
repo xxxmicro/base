@@ -31,6 +31,32 @@ func (r *baseRepository) Update(c context.Context, m model.Model) error {
 	return db.Save(m).Error
 }
 
+func (r *baseRepository) UpdateSelective(c context.Context, m model.Model, data map[string]interface{}) error {
+	db := opentracing.SetSpanToGorm(c, r.db)
+
+	// 主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
+	ms := r.db.NewScope(m).GetModelStruct()
+	for _, pf := range ms.PrimaryFields {
+		value, err := breflect.GetStructField(m, pf.Name)
+		if err != nil {
+			return err
+		}
+
+		if breflect.IsBlank(value) {
+			return errors.New(fmt.Sprintf("primary key %s must be set for update", pf.Name))
+		}
+	}
+
+	for k, _ := range data {
+		if _, ok := FindField(k, ms, db); !ok {
+			return errors.New(fmt.Sprintf("field(%s) not exists", k))
+		}
+	}
+
+	return db.Model(m).Updates(data).Error
+}
+
+
 func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
@@ -38,7 +64,7 @@ func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
 }
 
 func (r *baseRepository) Delete(c context.Context, m model.Model) error {
-	// TODO 这里要做主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
+	// 主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
 	ms := r.db.NewScope(m).GetModelStruct()
 	for _, pf := range ms.PrimaryFields {		
 		value, err := breflect.GetStructField(m, pf.Name)
@@ -105,7 +131,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 	count := breflect.SlicePtrLen(resultPtr)
 	if count > 0 {
 		minItem := breflect.SlicePtrIndexOf(resultPtr, 0)
-		field, ok := FindColumn(query.CursorSort.Property, ms, dbHandler)
+		field, ok := FindField(query.CursorSort.Property, ms, dbHandler)
 		if !ok {
 			err = errors.New("field not found")
 			return

@@ -122,6 +122,17 @@ func TestCrud(t *testing.T) {
 	}
 
 	{
+		data := map[string]interface{}{
+			"name": "孙悟空",
+		}
+		err := userRepo.UpdateSelective(context.Background(), &User{}, data)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+		log.Info("选择更新成功")
+	}
+
+	{
 		findUser := &User{ ID: user1.ID }
 		err := userRepo.FindOne(context.Background(), findUser)
 		if assert.Error(t, err) {

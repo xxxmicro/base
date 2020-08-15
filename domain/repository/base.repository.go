@@ -10,6 +10,8 @@ type BaseRepository interface {
 
 	Update(c context.Context, m model.Model) error
 
+	UpdateSelective(c context.Context, m model.Model, data map[string]interface{}) error
+
 	FindOne(c context.Context, m model.Model) error
 	
 	// 翻页查询
