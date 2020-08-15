@@ -1,13 +1,14 @@
 package gorm_test
 
-import(
-	"testing"
+import (
 	"context"
-	"github.com/xxxmicro/base/database/gorm"
-	"github.com/xxxmicro/base/opentracing/jaeger"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/memory"
 	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/xxxmicro/base/database/gorm"
+	opentracing2 "github.com/xxxmicro/base/database/gorm/opentracing"
+	"github.com/xxxmicro/base/opentracing/jaeger"
+	"testing"
 )
 
 type User struct {
@@ -56,7 +57,7 @@ func TestGorm(t *testing.T) {
 	span, ctx := opentracing.StartSpanFromContext(context.Background(), "handler")
 	defer span.Finish()
 
-	db = gorm.SetSpanToGorm(ctx, db)
+	db = opentracing2.SetSpanToGorm(ctx, db)
 
 	err = db.Table("users").Create(user).Error
 	if err != nil {

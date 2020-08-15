@@ -2,9 +2,11 @@ package gorm
 
 import(
 	"fmt"
+	"time"
 	"errors"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/domain/model"
+	"github.com/xxxmicro/base/types/smarttime"
 )
 
 func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *model.CursorQuery) (*_gorm.DB, bool, error) {
@@ -12,9 +14,21 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 	var reverse bool
 
 	sortKey := query.CursorSort.Property
-	if _, ok := FindColumn(sortKey, ms, queryHandler); !ok {
+	
+	field, ok := FindColumn(sortKey, ms, queryHandler);
+	if !ok {
 		err := errors.New(fmt.Sprintf("ERR_DB_UNKNOWN_FIELD %s", sortKey))
 		return nil, reverse, err
+	}
+
+	value := query.Cursor
+
+	switch field.Struct.Type.String() {
+	case "time.Time", "*time.Time":
+		v, err := smarttime.Parse(value)
+		if err == nil {
+			value = time.Time(v)
+		}
 	}
 
 	switch query.CursorSort.Type {
@@ -25,14 +39,14 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 				orderBy = fmt.Sprintf("%s %s", sortKey, "ASC")
 				reverse = true
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), query.Cursor)
+					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
 				}
 			} else {
 				// 游标后
 				orderBy = fmt.Sprintf("%s %s", sortKey, "DESC")
 				reverse = false
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), query.Cursor)
+					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
 				}
 			}
 		}
@@ -43,14 +57,14 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 				orderBy = fmt.Sprintf("%s %s", sortKey, "DESC")
 				reverse = true
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), query.Cursor)
+					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
 				}
 			} else {
 				// 游标后
 				orderBy = fmt.Sprintf("%s %s", sortKey, "ASC")
 				reverse = false
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), query.Cursor)
+					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
 				}
 			}
 		}

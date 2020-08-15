@@ -1,13 +1,13 @@
 package gorm
 
-import(
-	"fmt"
+import (
 	"context"
 	"errors"
+	"fmt"
 	_gorm "github.com/jinzhu/gorm"
-	"github.com/xxxmicro/base/database/gorm"
-	"github.com/xxxmicro/base/domain/repository"
+	"github.com/xxxmicro/base/database/gorm/opentracing"
 	"github.com/xxxmicro/base/domain/model"
+	"github.com/xxxmicro/base/domain/repository"
 	breflect "github.com/xxxmicro/base/reflect"
 )
 
@@ -20,19 +20,19 @@ func NewBaseRepository(db *_gorm.DB) repository.BaseRepository {
 }
 
 func (r *baseRepository) Create(c context.Context, m model.Model) error {
-	db := gorm.SetSpanToGorm(c, r.db)
+	db := opentracing.SetSpanToGorm(c, r.db)
 
 	return db.Create(m).Error
 }
 
 func (r *baseRepository) Update(c context.Context, m model.Model) error {
-	db := gorm.SetSpanToGorm(c, r.db)
+	db := opentracing.SetSpanToGorm(c, r.db)
 
 	return db.Save(m).Error
 }
 
 func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
-	db := gorm.SetSpanToGorm(c, r.db)
+	db := opentracing.SetSpanToGorm(c, r.db)
 
 	return db.Where(m.Unique()).Take(m).Error
 }
@@ -84,7 +84,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 		return
 	}
 
-	dbHandler, reverse, err := GormCursorFilter(dbHandler, ms, query)
+	dbHandler, reverse, err := gormCursorFilter(dbHandler, ms, query)
 	if err != nil {
 		return
 	}

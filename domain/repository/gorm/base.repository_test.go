@@ -1,18 +1,19 @@
 package gorm
 
-import(
-	"testing"
-	"encoding/json"
-	"time"
+import (
 	"context"
-	"github.com/satori/go.uuid"
-	"github.com/xxxmicro/base/log"
-	"github.com/xxxmicro/base/database/gorm"
-	"github.com/xxxmicro/base/domain/model"
+	"encoding/json"
+	"fmt"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/memory"
+	"github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/xxxmicro/base/database/gorm"
+	"github.com/xxxmicro/base/domain/model"
+	"github.com/xxxmicro/base/log"
+	"testing"
+	"time"
 )
 
 func init() {
@@ -23,13 +24,15 @@ type User struct {
 	ID	string				`json:"id"`
 	Name string				`json:"name"`
 	Age int 				`json:"age"`
-	Ctime time.Time 		`json:"ctime"`
-	Mtime time.Time 		`json:"mtime"`
-	Dtime time.Time 		`json:"dtime"`
+	Ctime time.Time 		`json:"ctime" gorm:"update_time_stamp"`
+	Mtime time.Time 		`json:"mtime" gorm:"update_time_stamp"`
+	Dtime *time.Time 		`json:"dtime"`
 }
 
 func (u *User) Unique() interface{} {
-	return u
+	return map[string]interface{}{
+		"id": u.ID,
+	}
 }
 
 func getConfig() (config.Config, error) {
@@ -68,18 +71,15 @@ func TestCrud(t *testing.T) {
 	config, err := getConfig()
 	if err != nil {
 		t.Fatal(err)
-		return
 	}
 
 	db, err := getDB(config)
 	if err != nil {
 		t.Fatal(err)
-		return
 	}
 
 	db.AutoMigrate(&User{})
 	log.Info("创建数据表完毕")
-
 
 
 	userRepo := NewBaseRepository(db)
@@ -98,10 +98,16 @@ func TestCrud(t *testing.T) {
 
 	{
 		err := userRepo.Create(context.Background(), user1)
-		assert.NoError(t, err)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		time.Sleep(time.Second * 3)
 
 		err = userRepo.Create(context.Background(), user2)
-		assert.NoError(t, err)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
 
 		log.Info("插入记录成功")
 	}
@@ -109,15 +115,18 @@ func TestCrud(t *testing.T) {
 	{
 		user1.Name = "赵云"
 		err := userRepo.Update(context.Background(), user1)
-		assert.NoError(t, err)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
 		log.Info("更新记录成功")
 	}
 
 	{
 		findUser := &User{ ID: user1.ID }
 		err := userRepo.FindOne(context.Background(), findUser)
-		assert.NoError(t, err)
-		t.Log(findUser)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
 		log.Info("找到对应记录")
 	}
 
@@ -135,30 +144,54 @@ func TestCrud(t *testing.T) {
 	
 		items := make([]*User, 0)
 		total, pageCount, err := userRepo.Page(context.Background(), pageQuery, &User{}, &items)
-		assert.NoError(t, err)
-		assert.Equal(t, 1, total)
-		assert.Equal(t, 1, pageCount)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		if assert.Equal(t, 1, total) {
+			log.Info("翻页查询正确")
+		} else {
+			log.Info(fmt.Sprintf("翻页查询错误, 期望1条记录，实际返回%d条", total))
+		}
+
+		if assert.Equal(t, 1, pageCount) {
+			log.Info("翻页查询正确")
+		} else {
+			log.Info(fmt.Sprintf("翻页查询错误 期望1页, 实际返回%d页", pageCount))
+		}
 
 		b, _ := json.Marshal(items)
 		s := string(b)
 		t.Log(s)
-		log.Info("翻页查询正确")
 	}
 
 	{
+		h, _ := time.ParseDuration("1s")
+		t1 := user1.Ctime.Add(h)
+		cursor := t1.UnixNano() / 1e6
+
 		cursorQuery := &model.CursorQuery{
 			Filters: map[string]interface{}{
 			},
 			CursorSort: &model.SortSpec{
 				Property: "ctime",
 			},
-			Cursor: nil,
+			Cursor: cursor,
 			Size: 10,
 		}
 
 		items := make([]*User, 0)
 		extra, err := userRepo.Cursor(context.Background(), cursorQuery, &User{}, &items)
-		assert.NoError(t, err)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		if assert.Equal(t, 1, len(items)) {
+			log.Info("游标查询正确")
+		} else {
+			log.Info(fmt.Sprintf("游标查询错误 期望1条, 实际返回%d条", len(items)))
+		}
+
 		b, _ := json.Marshal(items)
 		s := string(b)
 		t.Log(s)
