@@ -52,9 +52,7 @@ func getReflectInfo(t reflect.Type, customize func(*StructField)) (*StructInfo, 
 			tableField := strings.TrimSpace(structField.Tag.Get("bson"))
 			structFieldType := structField.Type
 
-			// 如果字段
 			if len(tableField) != 0 {
-
 				if structField.Type.Kind() == reflect.Ptr {
 					structFields := parseEmbedStruct(structField)
 					for _, v := range structFields {

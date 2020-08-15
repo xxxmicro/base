@@ -230,7 +230,10 @@ func TestCrud(t *testing.T) {
 			PageSize: 10,
 			PageNo: 1,
 		}, &User{}, &items)
-		assert.NoError(t, err)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
 		assert.Equal(t, 1, total)
 		assert.Equal(t, 1, len(items))
 

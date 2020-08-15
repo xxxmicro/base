@@ -1,14 +1,16 @@
 package mongo
 
-import(
+import (
 	"errors"
 	"fmt"
-	"gopkg.in/mgo.v2/bson"
 	"github.com/xxxmicro/base/domain/model"
-	breflect "github.com/xxxmicro/base/reflect"
+	"github.com/xxxmicro/base/domain/repository/mongo/reflect"
+	"github.com/xxxmicro/base/types/smarttime"
+	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
-func buildQuery(ms *breflect.StructInfo, filters map[string]interface{}) (bson.M, error) {
+func buildQuery(ms *reflect.StructInfo, filters map[string]interface{}) (bson.M, error) {
 	bFilters := bson.M{}
 	if filters == nil || len(filters) == 0 {
 		return bFilters, nil
@@ -79,12 +81,13 @@ func buildQuery(ms *breflect.StructInfo, filters map[string]interface{}) (bson.M
 				bFilters["$nor"] = subBFilters
 			}
 		default:
-			if _, ok := ms.FieldsMap[k]; !ok {
+			field, ok := ms.FieldsMap[k]
+			if !ok {
 				err := errors.New(fmt.Sprintf("ERR_DB_UNKNOWN_FIELD %s", k))
 				return nil, err
 			}
 
-			bFilter, err := buildMongoFilter(ms, v)
+			bFilter, err := buildMongoFilter(field, v)
 			if err != nil {
 				return nil, err
 			}
@@ -94,13 +97,28 @@ func buildQuery(ms *breflect.StructInfo, filters map[string]interface{}) (bson.M
 	return bFilters, nil
 }
 
-func buildMongoFilter(ms *breflect.StructInfo, value interface{}) (bson.M, error) {
+func buildMongoFilter(field *reflect.StructField, value interface{}) (bson.M, error) {
 	vMap, ok := value.(map[string]interface{})
 	if !ok {
+		switch field.FieldType.String() {
+		case "time.Time", "*time.Time":
+			v, err := smarttime.Parse(value)
+			if err == nil {
+				value = time.Time(v)
+			}
+		}
 		return bson.M{"$eq": value}, nil
 	}
 
 	for vKey, vValue := range vMap {
+		switch field.FieldType.String() {
+		case "time.Time", "*time.Time":
+			v, err := smarttime.Parse(vValue)
+			if err == nil {
+				vValue = time.Time(v)
+			}
+		}
+
 		filterType := model.FilterType(vKey)
 		switch filterType {
 		case model.FilterType_EQ:
@@ -136,7 +154,7 @@ func buildMongoFilter(ms *breflect.StructInfo, value interface{}) (bson.M, error
 	return bson.M{}, nil
 }
 
-func buildSort(ms *breflect.StructInfo, sorts []*model.SortSpec) ([]string, error){
+func buildSort(ms *reflect.StructInfo, sorts []*model.SortSpec) ([]string, error){
 	bsorts := []string{}
 	if sorts != nil {
 		for _, s := range sorts {

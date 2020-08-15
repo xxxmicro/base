@@ -3,6 +3,7 @@ package mongo
 import(
         "bytes"
         "strings"
+        "github.com/jinzhu/inflection"
 )
 
 
@@ -87,6 +88,8 @@ func defaultNamer(name string) string {
         buf.WriteByte(value[len(value)-1])
 
         s := strings.ToLower(buf.String())
+        s = inflection.Plural(s)
+
         smap.Set(name, s)
         return s
 }

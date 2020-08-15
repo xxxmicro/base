@@ -1,6 +1,7 @@
 package mongo
 
 import(
+	"fmt"
 	"testing"
 	"encoding/json"
 	"time"
@@ -85,19 +86,23 @@ func TestCrud(t *testing.T) {
 	// db.AutoMigrate(&User{})
 	// log.Info("创建数据表完毕")
 
-
 	userRepo := NewBaseRepository(db)
 
+	now := time.Now()
 	user1 := &User{
 		ID: bson.NewObjectId(),
 		Name: "吕布",
 		Age: 28,
+		Ctime: now,
+		Mtime: now,
 	}
 	
 	user2 := &User{
 		ID: bson.NewObjectId(),
 		Name: "貂蝉",
 		Age: 21,
+		Ctime: now,
+		Mtime: now,
 	}
 
 	{
@@ -107,6 +112,8 @@ func TestCrud(t *testing.T) {
 			log.Fatal("插入记录失败")
 			return
 		}
+
+		time.Sleep(time.Second * 3)
 
 		err = userRepo.Create(context.Background(), user2)
 		assert.NoError(t, err)
@@ -119,14 +126,31 @@ func TestCrud(t *testing.T) {
 	}
 
 	{
-		user1.Name = "赵云"
-		err := userRepo.Update(context.Background(), user1)
+		// ctime, mtime 被覆盖了
+		userForUpdate := &User{ ID: user1.ID, Name: "赵云", Age: 30, Ctime: user1.Ctime }
+		err := userRepo.Update(context.Background(), userForUpdate)
 		assert.NoError(t, err)
 		log.Info("更新记录成功")
 	}
 
 	{
-		findUser := &User{ID: user1.ID }
+		data := map[string]interface{}{
+			"name": "孙悟空",
+		}
+		err := userRepo.UpdateSelective(context.Background(), &User{}, data)
+		if !assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		err = userRepo.UpdateSelective(context.Background(), user2, data)
+		if !assert.NoError(t, err) {
+			t.Fatal(err)
+		}
+		log.Info("选择更新成功")
+	}
+
+	{
+		findUser := &User{ID: user2.ID }
 		err := userRepo.FindOne(context.Background(), findUser)
 		assert.NoError(t, err)
 		if err != nil {
@@ -152,34 +176,57 @@ func TestCrud(t *testing.T) {
 	
 		items := make([]*User, 0)
 		total, pageCount, err := userRepo.Page(context.Background(), pageQuery, &User{}, &items)
-		assert.NoError(t, err)
-		assert.Equal(t, 1, total)
-		assert.Equal(t, 1, pageCount)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		if assert.Equal(t, 1, total) {
+			log.Info("翻页查询总数正确")
+		} else {
+			log.Info(fmt.Sprintf("翻页查询总数错误, 期望1, 返回%d", total))
+		}
+
+		if assert.Equal(t, 1, pageCount) {
+			log.Info("翻页查询页数正确")
+		} else {
+			log.Info(fmt.Sprintf("翻页查询页数错误, 期望1, 返回%d", pageCount))
+		}
 
 		b, _ := json.Marshal(items)
 		s := string(b)
 		t.Log(s)
-		log.Info("翻页查询正确")
 	}
 
 	{
+		h, _ := time.ParseDuration("1s")
+		t1 := user1.Ctime.Add(h)
+		cursor := t1.UnixNano() / 1e6
+
 		cursorQuery := &model.CursorQuery{
 			Filters: map[string]interface{}{
 			},
 			CursorSort: &model.SortSpec{
 				Property: "ctime",
 			},
-			Cursor: nil,
+			Cursor: cursor,
 			Size: 10,
 		}
 
 		items := make([]*User, 0)
 		extra, err := userRepo.Cursor(context.Background(), cursorQuery, &User{}, &items)
-		assert.NoError(t, err)
-		b, _ := json.Marshal(items)
+		if assert.Error(t, err) {
+			t.Fatal(err)
+		}
+
+		if assert.Equal(t, 1, len(items)) {
+			log.Info("游标查询正确")
+		} else {
+			log.Info(fmt.Sprintf("游标查询错误 期望1条, 实际返回%d条", len(items)))
+		}
+
+		b, _ := json.Marshal(extra)
 		s := string(b)
 		t.Log(s)
-		t.Log(extra)
 		log.Info("游标查询成功")
 	}
 

@@ -1,15 +1,17 @@
 package mongo
 
-import(
-	"fmt"
+import (
 	"context"
-	"reflect"
+	"errors"
+	"fmt"
+	"github.com/xxxmicro/base/database/mongo"
+	"github.com/xxxmicro/base/domain/model"
+	"github.com/xxxmicro/base/domain/repository"
+	reflect2 "github.com/xxxmicro/base/domain/repository/mongo/reflect"
+	breflect "github.com/xxxmicro/base/reflect"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"github.com/xxxmicro/base/database/mongo"
-	"github.com/xxxmicro/base/domain/repository"
-	"github.com/xxxmicro/base/domain/model"
-	breflect "github.com/xxxmicro/base/reflect"
+	"reflect"
 )
 
 type baseRepository struct {
@@ -21,7 +23,7 @@ func NewBaseRepository(db *mongo.DB) repository.BaseRepository {
 }
 
 func (r *baseRepository) Create(c context.Context, m model.Model) error {
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
@@ -34,7 +36,7 @@ func (r *baseRepository) Create(c context.Context, m model.Model) error {
 }
 
 func (r *baseRepository) Update(c context.Context, m model.Model) error {
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
@@ -45,8 +47,28 @@ func (r *baseRepository) Update(c context.Context, m model.Model) error {
 	})
 }
 
+func (r *baseRepository) UpdateSelective(c context.Context, m model.Model, data map[string]interface{}) error {
+	ms, err := reflect2.GetStructInfo(m, nil)
+	if err != nil {
+		return err
+	}
+	collection := TheNamingStrategy.Table(ms.Name)
+
+	for k, _ := range data {
+		if _, ok := ms.FieldsMap[k]; !ok {
+			return errors.New(fmt.Sprintf("field(%s) not exists", k))
+		}
+	}
+
+	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
+		return c.Update(m.Unique(), bson.M{
+			"$set": data,
+		})
+	})
+}
+
 func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
@@ -58,7 +80,7 @@ func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
 }
 
 func (r *baseRepository) Delete(c context.Context, m model.Model) error {
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
@@ -70,7 +92,7 @@ func (r *baseRepository) Delete(c context.Context, m model.Model) error {
 }
 
 func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model.Model, resultPtr interface{}) (total int, pageCount int, err error){
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
 	}
@@ -87,7 +109,7 @@ func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model
 	}
 	
 	err = Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
-		total, err := c.Find(filters).Count()
+		total, err = c.Find(filters).Count()
 		if err != nil {
 			return err
 		}
@@ -115,14 +137,20 @@ func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model
 }
 
 func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
-	ms, err := breflect.GetStructInfo(m, nil)
+	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-	
+
 	filters, err := buildQuery(ms, query.Filters)
 	if err != nil {
+		return
+	}
+
+	cursorProp, ok := ms.FieldsMap[query.CursorSort.Property]
+	if !ok {
+		err = errors.New(fmt.Sprintf("cursor prop(%s) not found", query.CursorSort.Property))
 		return
 	}
 
@@ -159,13 +187,15 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 		}
 		
 		minCursorModel := breflect.SlicePtrIndexOf(resultPtr, 0)
-		minCursor, err = breflect.GetStructField(minCursorModel, query.CursorSort.Property)
+
+
+		minCursor, err = breflect.GetStructField(minCursorModel, cursorProp.Name)
 		if err != nil {
 			return
 		}
 
 		maxCursorModel := breflect.SlicePtrIndexOf(resultPtr, count - 1)
-		maxCursor, err = breflect.GetStructField(maxCursorModel, query.CursorSort.Property)
+		maxCursor, err = breflect.GetStructField(maxCursorModel, cursorProp.Name)
 		if err != nil {
 			return
 		}
