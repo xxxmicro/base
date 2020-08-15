@@ -3,11 +3,9 @@ package gorm
 import(
 	"time"
 	"errors"
-	"os"
 	 _ "github.com/go-sql-driver/mysql"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/jinzhu/gorm"
-	"github.com/sirupsen/logrus"
 )
 
 func NewDbProvider(config config.Config) (*gorm.DB, error) {
@@ -32,9 +30,6 @@ func NewDbProvider(config config.Config) (*gorm.DB, error) {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetConnMaxLifetime(3 * time.Minute)
 
-	// 创建自定义的日志实例
-	log := logrus.New()
-	log.Out = os.Stdout
 	AddGormCallbacks(db)
 
 	return db, nil
