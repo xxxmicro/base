@@ -126,6 +126,11 @@ func TestCrud(t *testing.T) {
 			"name": "孙悟空",
 		}
 		err := userRepo.UpdateSelective(context.Background(), &User{}, data)
+		if assert.NoError(t, err) {
+			t.Fatal(err)
+		}
+
+		err = userRepo.UpdateSelective(context.Background(), user1, data)
 		if assert.Error(t, err) {
 			t.Fatal(err)
 		}
