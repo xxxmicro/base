@@ -88,24 +88,22 @@ func TestCrud(t *testing.T) {
 
 	userRepo := NewBaseRepository(db)
 
-	now := time.Now()
 	user1 := &User{
 		ID: bson.NewObjectId(),
 		Name: "吕布",
 		Age: 28,
-		Ctime: now,
-		Mtime: now,
 	}
 	
 	user2 := &User{
 		ID: bson.NewObjectId(),
 		Name: "貂蝉",
 		Age: 21,
-		Ctime: now,
-		Mtime: now,
 	}
 
 	{
+		now := time.Now()
+		user1.Ctime = now
+		user2.Mtime = now
 		err := userRepo.Create(context.Background(), user1)
 		assert.NoError(t, err)
 		if err != nil {
@@ -115,6 +113,9 @@ func TestCrud(t *testing.T) {
 
 		time.Sleep(time.Second * 3)
 
+		now = time.Now()
+		user2.Ctime = now
+		user2.Mtime = now
 		err = userRepo.Create(context.Background(), user2)
 		assert.NoError(t, err)
 		if err != nil {
