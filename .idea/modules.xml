@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/base.iml" filepath="$PROJECT_DIR$/.idea/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/microbase.iml" filepath="$PROJECT_DIR$/.idea/microbase.iml" />
     </modules>
   </component>
 </project>

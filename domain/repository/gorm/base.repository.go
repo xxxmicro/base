@@ -25,35 +25,30 @@ func (r *baseRepository) Create(c context.Context, m model.Model) error {
 	return db.Create(m).Error
 }
 
-func (r *baseRepository) Update(c context.Context, m model.Model) error {
+func (r *baseRepository) Upsert(c context.Context, m model.Model) (*repository.ChangeInfo, error) {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
-	return db.Save(m).Error
+	result := db.Save(m)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	change := &repository.ChangeInfo{
+		Updated: int(result.RowsAffected),
+	}
+	return change, nil
 }
 
-func (r *baseRepository) UpdateSelective(c context.Context, m model.Model, data map[string]interface{}) error {
+func (r *baseRepository) Update(c context.Context, m model.Model, data interface{}) error {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
 	// 主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
-	ms := r.db.NewScope(m).GetModelStruct()
-	for _, pf := range ms.PrimaryFields {
-		value, err := breflect.GetStructField(m, pf.Name)
-		if err != nil {
-			return err
-		}
-
-		if breflect.IsBlank(value) {
-			return errors.New(fmt.Sprintf("primary key %s must be set for update", pf.Name))
-		}
+	scope := r.db.NewScope(m)
+	if scope.PrimaryKeyZero() {
+		return errors.New(fmt.Sprintf("primary key(%s) must be set for update", scope.PrimaryKey()))
 	}
 
-	for k, _ := range data {
-		if _, ok := FindField(k, ms, db); !ok {
-			return errors.New(fmt.Sprintf("field(%s) not exists", k))
-		}
-	}
-
-	return db.Model(m).Updates(data).Error
+	return db.Model(m).Update(data).Error
 }
 
 
@@ -81,7 +76,7 @@ func (r *baseRepository) Delete(c context.Context, m model.Model) error {
 }
 
 
-func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model.Model, resultPtr interface{}) (total int, pageCount int, err error){
+func (r *baseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error){
 	// items := breflect.MakeSlicePtr(m, 0, 0)
 	ms := r.db.NewScope(m).GetModelStruct()
 

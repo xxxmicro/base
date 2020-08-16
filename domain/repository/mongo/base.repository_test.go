@@ -70,7 +70,9 @@ func getDB(config config.Config) (*mongo.DB, error) {
 	return db, nil
 }
 
-func TestCrud(t *testing.T) {	
+func TestCrud(t *testing.T) {
+	assert := assert.New(t)
+
 	config, err := getConfig()
 	if err != nil {
 		t.Fatal(err)
@@ -105,7 +107,7 @@ func TestCrud(t *testing.T) {
 		user1.Ctime = now
 		user2.Mtime = now
 		err := userRepo.Create(context.Background(), user1)
-		assert.NoError(t, err)
+		assert.NoError(err)
 		if err != nil {
 			log.Fatal("插入记录失败")
 			return
@@ -117,7 +119,7 @@ func TestCrud(t *testing.T) {
 		user2.Ctime = now
 		user2.Mtime = now
 		err = userRepo.Create(context.Background(), user2)
-		assert.NoError(t, err)
+		assert.NoError(err)
 		if err != nil {
 			log.Fatal("插入记录失败")
 			return
@@ -126,25 +128,28 @@ func TestCrud(t *testing.T) {
 		log.Info("插入记录成功")
 	}
 
+	user3 := &User{
+		ID: bson.NewObjectId(),
+		Name: "关羽",
+		Age: 38,
+	}
 	{
-		// ctime, mtime 被覆盖了
-		userForUpdate := &User{ ID: user1.ID, Name: "赵云", Age: 30, Ctime: user1.Ctime }
-		err := userRepo.Update(context.Background(), userForUpdate)
-		assert.NoError(t, err)
-		log.Info("更新记录成功")
+		change, err := userRepo.Upsert(context.Background(), user3)
+		assert.NoError(err)
+		t.Logf("change: %v", change)
 	}
 
 	{
 		data := map[string]interface{}{
-			"name": "孙悟空",
+			"name": "赵云",
 		}
-		err := userRepo.UpdateSelective(context.Background(), &User{}, data)
-		if !assert.Error(t, err) {
+		err := userRepo.Update(context.Background(), &User{}, data)
+		if !assert.Error(err) {
 			t.Fatal(err)
 		}
 
-		err = userRepo.UpdateSelective(context.Background(), user2, data)
-		if !assert.NoError(t, err) {
+		err = userRepo.Update(context.Background(), user1, data)
+		if !assert.NoError(err) {
 			t.Fatal(err)
 		}
 		log.Info("选择更新成功")
@@ -153,7 +158,7 @@ func TestCrud(t *testing.T) {
 	{
 		findUser := &User{ID: user2.ID }
 		err := userRepo.FindOne(context.Background(), findUser)
-		assert.NoError(t, err)
+		assert.NoError(err)
 		if err != nil {
 			log.Info("查找记录失败")
 			t.Fatal(err)
@@ -176,18 +181,18 @@ func TestCrud(t *testing.T) {
 		}
 	
 		items := make([]*User, 0)
-		total, pageCount, err := userRepo.Page(context.Background(), pageQuery, &User{}, &items)
-		if assert.Error(t, err) {
+		total, pageCount, err := userRepo.Page(context.Background(), &User{}, pageQuery, &items)
+		if assert.Error(err) {
 			t.Fatal(err)
 		}
 
-		if assert.Equal(t, 1, total) {
+		if assert.Equal(1, total) {
 			log.Info("翻页查询总数正确")
 		} else {
 			log.Info(fmt.Sprintf("翻页查询总数错误, 期望1, 返回%d", total))
 		}
 
-		if assert.Equal(t, 1, pageCount) {
+		if assert.Equal( 1, pageCount) {
 			log.Info("翻页查询页数正确")
 		} else {
 			log.Info(fmt.Sprintf("翻页查询页数错误, 期望1, 返回%d", pageCount))
@@ -215,11 +220,11 @@ func TestCrud(t *testing.T) {
 
 		items := make([]*User, 0)
 		extra, err := userRepo.Cursor(context.Background(), cursorQuery, &User{}, &items)
-		if assert.Error(t, err) {
+		if assert.Error(err) {
 			t.Fatal(err)
 		}
 
-		if assert.Equal(t, 1, len(items)) {
+		if assert.Equal(2, len(items)) {
 			log.Info("游标查询正确")
 		} else {
 			log.Info(fmt.Sprintf("游标查询错误 期望1条, 实际返回%d条", len(items)))
@@ -228,45 +233,36 @@ func TestCrud(t *testing.T) {
 		b, _ := json.Marshal(extra)
 		s := string(b)
 		t.Log(s)
-		log.Info("游标查询成功")
 	}
 
 	{
 		err := userRepo.Delete(context.Background(), &User{ID: user1.ID})
-		assert.NoError(t, err)
-		if err != nil {
-			log.Fatal("删除记录失败")			
-			return
-		}
+		assert.NoError(err)
 		log.Info("删除记录成功")
 
 		items := make([]*User, 0)
-		total, pageCount, err := userRepo.Page(context.Background(), &model.PageQuery{
+		total, pageCount, err := userRepo.Page(context.Background(), &User{}, &model.PageQuery{
 			Filters: map[string]interface{}{},
 			PageSize: 10,
 			PageNo: 1,
-		}, &User{}, &items)
-		assert.NoError(t, err)
-		assert.Equal(t, 1, total)
-		assert.Equal(t, 1, len(items))
+		}, &items)
+		assert.NoError(err)
+		assert.Equal(1, total)
+		assert.Equal(1, len(items))
 
 		err = userRepo.Delete(context.Background(), &User{ID: user2.ID})
-		assert.NoError(t, err)
-		if err != nil {
-			log.Fatal("删除记录失败")			
-			return
-		}
+		err = userRepo.Delete(context.Background(), &User{ID: user3.ID})
 		log.Info("删除记录成功")
 
 		items = make([]*User, 0)
-		total, pageCount, err = userRepo.Page(context.Background(), &model.PageQuery{
+		total, pageCount, err = userRepo.Page(context.Background(), &User{}, &model.PageQuery{
 			Filters: map[string]interface{}{},
 			PageSize: 10,
 			PageNo: 1,
-		}, &User{}, &items)
-		assert.NoError(t, err)
-		assert.Equal(t, 0, total)
-		assert.Equal(t, 0, pageCount)
+		}, &items)
+		assert.NoError(err)
+		assert.Equal(0, total)
+		assert.Equal(0, pageCount)
 	
 		log.Info("翻页核对成功")
 	}

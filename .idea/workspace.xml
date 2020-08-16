@@ -19,22 +19,29 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0da5df08-d45a-45d0-9f0d-db0601aad3a5" name="Default Changelist" comment="">
+    <list default="true" id="bd45dc2b-c208-4a14-9add-1370b7f3b83c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/microbase.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/base.repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/base.repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/gorm/base.repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/base.repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/mongo/base.repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/mongo/base.repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/mongo/base.repository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/mongo/base.repository_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="GOROOT" path="/usr/local/go" />
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.14.2_1/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
-  <component name="ProjectId" id="1g8DvPtkJXdfTlzY9dWD0XggDLD" />
+  <component name="ProjectId" id="1gC9BS4AwnYCAuOMmApLCbvnDiM" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,38 +54,9 @@
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/domain/repository/mongo/reflect" />
-      <recent name="$PROJECT_DIR$/database/gorm/opentracing" />
-      <recent name="$PROJECT_DIR$/database/gorm" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)">
-    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm (3)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="base" />
-      <working_directory value="$PROJECT_DIR$/domain/repository/gorm" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="github.com/xxxmicro/base/domain/repository/gorm" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^\QTestCrud\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm (4)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="base" />
-      <working_directory value="$PROJECT_DIR$/domain/repository/gorm" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="github.com/xxxmicro/base/domain/repository/gorm" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <pattern value="^\QTestCrud\E$" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (4)">
     <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="base" />
+      <module name="microbase" />
       <working_directory value="$PROJECT_DIR$/domain/repository/gorm" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
@@ -89,7 +67,7 @@
       <method v="2" />
     </configuration>
     <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="base" />
+      <module name="microbase" />
       <working_directory value="$PROJECT_DIR$/domain/repository/mongo" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
@@ -99,8 +77,30 @@
       <pattern value="^\QTestCrud\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="base" />
+    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo (2)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="microbase" />
+      <working_directory value="$PROJECT_DIR$/domain/repository/mongo" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/xxxmicro/base/domain/repository/mongo" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestCrud\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo (3)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="microbase" />
+      <working_directory value="$PROJECT_DIR$/domain/repository/mongo" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/xxxmicro/base/domain/repository/mongo" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <pattern value="^\QTestCrud\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo (4)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="microbase" />
       <working_directory value="$PROJECT_DIR$/domain/repository/mongo" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
@@ -112,11 +112,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)" />
-        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo" />
+        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (4)" />
+        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (3)" />
+        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (2)" />
         <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm" />
-        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm (4)" />
-        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm (3)" />
+        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -139,82 +139,41 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1754" height="470" key="GridCell.Tab.0.bottom" timestamp="1597506655580">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.0.bottom" timestamp="1597614018341">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655580" />
-    <state width="1754" height="470" key="GridCell.Tab.0.center" timestamp="1597506655579">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.0.bottom/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018341" />
+    <state width="1480" height="240" key="GridCell.Tab.0.center" timestamp="1597614018340">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655579" />
-    <state width="1754" height="470" key="GridCell.Tab.0.left" timestamp="1597506655578">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.0.center/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018340" />
+    <state width="1480" height="240" key="GridCell.Tab.0.left" timestamp="1597614018340">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655578" />
-    <state width="1754" height="470" key="GridCell.Tab.0.right" timestamp="1597506655579">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.0.left/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018340" />
+    <state width="1480" height="240" key="GridCell.Tab.0.right" timestamp="1597614018341">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.0.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655579" />
-    <state width="1754" height="470" key="GridCell.Tab.1.bottom" timestamp="1597506655581">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.0.right/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018341" />
+    <state width="1480" height="240" key="GridCell.Tab.1.bottom" timestamp="1597614018499">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.bottom/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655581" />
-    <state width="1754" height="470" key="GridCell.Tab.1.center" timestamp="1597506655580">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.1.bottom/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018499" />
+    <state width="1480" height="240" key="GridCell.Tab.1.center" timestamp="1597614018499">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.center/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655580" />
-    <state width="1754" height="470" key="GridCell.Tab.1.left" timestamp="1597506655580">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.1.center/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018499" />
+    <state width="1480" height="240" key="GridCell.Tab.1.left" timestamp="1597614018499">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.left/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655580" />
-    <state width="1754" height="470" key="GridCell.Tab.1.right" timestamp="1597506655581">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.1.left/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018499" />
+    <state width="1480" height="240" key="GridCell.Tab.1.right" timestamp="1597614018499">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state width="1754" height="470" key="GridCell.Tab.1.right/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506655581" />
-    <state x="2318" y="274" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1597492553216">
-      <screen x="1680" y="-12" width="2560" height="1337" />
+    <state width="1480" height="240" key="GridCell.Tab.1.right/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614018499" />
+    <state x="568" y="169" width="604" height="735" key="find.popup" timestamp="1597613746507">
+      <screen x="0" y="23" width="1792" height="1046" />
     </state>
-    <state x="2318" y="274" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597492553216" />
-    <state x="2421" y="299" width="615" height="694" key="find.popup" timestamp="1597506385128">
-      <screen x="1680" y="-12" width="2560" height="1337" />
-    </state>
-    <state x="2421" y="299" width="615" height="694" key="find.popup/1680.-12.2560.1337/0.23.1680.1027@1680.-12.2560.1337" timestamp="1597506385128" />
-    <state x="2421" y="318" width="615" height="735" key="find.popup/1680.-12.2560.1417/0.23.1680.965@1680.-12.2560.1417" timestamp="1597489747112" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go</url>
-          <line>80</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$USER_HOME$/go/pkg/mod/github.com/jinzhu/gorm@v1.9.15/scope.go</url>
-          <line>1264</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/domain/repository/mongo/base.repository_test.go</url>
-          <line>216</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/domain/repository/mongo/base.repository.go</url>
-          <line>156</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/domain/repository/mongo/base.repository.go</url>
-          <line>139</line>
-          <option name="timeStamp" value="39" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="GoTestRunConfiguration">
-        <watch expression="*(*&quot;string&quot;)(824635041736)" />
-      </configuration>
-    </watches-manager>
+    <state x="568" y="169" width="604" height="735" key="find.popup/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597613746507" />
   </component>
 </project>

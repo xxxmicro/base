@@ -28,41 +28,49 @@ func (r *baseRepository) Create(c context.Context, m model.Model) error {
 		return err
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-	
-	fmt.Printf("xxx: %s %s\n", ms.Name, collection)
+
+	// TODO 找出 ctime, utime 的 tag 进行设置
+
 	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
 		return c.Insert(m)
 	})
 }
 
-func (r *baseRepository) Update(c context.Context, m model.Model) error {
+func (r *baseRepository) Upsert(c context.Context, m model.Model) (changeInfo *repository.ChangeInfo, err error) {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
-		return err
+		return
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
 
-	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
-		return c.Update(m.Unique(), m)
+	Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
+		var change *mgo.ChangeInfo
+		change, err = c.Upsert(m.Unique(), m)
+		if err != nil {
+			return err
+		}
+
+		changeInfo = &repository.ChangeInfo{
+			Updated: change.Updated,
+			Removed: change.Removed,
+			Matched: change.Matched,
+			UpsertedId: change.UpsertedId,
+		}
+		return nil
 	})
+	return
 }
 
-func (r *baseRepository) UpdateSelective(c context.Context, m model.Model, data map[string]interface{}) error {
+func (r *baseRepository) Update(c context.Context, m model.Model, change interface{}) error {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-
-	for k, _ := range data {
-		if _, ok := ms.FieldsMap[k]; !ok {
-			return errors.New(fmt.Sprintf("field(%s) not exists", k))
-		}
-	}
 
 	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
 		return c.Update(m.Unique(), bson.M{
-			"$set": data,
+			"$set": change,
 		})
 	})
 }
@@ -91,7 +99,7 @@ func (r *baseRepository) Delete(c context.Context, m model.Model) error {
 	})
 }
 
-func (r *baseRepository) Page(c context.Context, query *model.PageQuery, m model.Model, resultPtr interface{}) (total int, pageCount int, err error){
+func (r *baseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error){
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
