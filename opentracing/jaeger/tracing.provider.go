@@ -3,7 +3,7 @@ package jaeger
 import(
 	"github.com/pkg/errors"
 	"github.com/micro/go-micro/v2/config"
-	xxxmicro_opentracing "github.com/xxxmicro/opentracing"
+	xxxmicro_opentracing "github.com/xxxmicro/base/opentracing"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-lib/metrics/prometheus"
