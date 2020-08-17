@@ -7,17 +7,13 @@ import(
 	"time"
 	"context"
 	"gopkg.in/mgo.v2/bson"
-	"github.com/xxxmicro/base/log"
 	"github.com/xxxmicro/base/domain/model"
 	"github.com/xxxmicro/base/database/mongo"
 	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/config/source/memory"
 	"github.com/stretchr/testify/assert"
 )
-
-func init() {
-	log.Init("dev")
-}
 
 type User struct {
 	ID	bson.ObjectId		`bson:"_id"`

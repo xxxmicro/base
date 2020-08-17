@@ -11,14 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/xxxmicro/base/database/gorm"
 	"github.com/xxxmicro/base/domain/model"
-	"github.com/xxxmicro/base/log"
 	"testing"
 	"time"
 )
-
-func init() {
-	log.Init("dev")
-}
 
 type User struct {
 	ID	string				`json:"id" gorm:"primary_key"`

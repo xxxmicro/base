@@ -2,10 +2,10 @@ package source
 
 import(
 	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/config/encoder/yaml"
 	"github.com/micro/go-micro/v2/config/source"
 	"github.com/xxxmicro/go-micro-apollo-plugin"
-	"github.com/xxxmicro/base/log"
 	"github.com/xxxmicro/base/config"
 )
 
@@ -16,7 +16,7 @@ func NewSourceProvider(c *cli.Context) source.Source {
 	}
 
 	if len(address) == 0 {
- 		log.Fatal("need config address")
+ 		logger.Fatal("need config address")
 	 	return nil
 	}
 		

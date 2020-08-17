@@ -438,6 +438,7 @@ github.com/xeipuuv/gojsonschema v1.1.0/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4m
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xxxmicro/go-micro-apollo-plugin v1.0.3 h1:yU17W0FmyK02GKfUySCZbWMkOM9v8nRnwvl9Vn9zHEU=
 github.com/xxxmicro/go-micro-apollo-plugin v1.0.3/go.mod h1:RUlvNaOFL5JMNL+oBUn/8jD5M2h3IVBp6X6r5bKoZng=
+github.com/xxxmicro/go-micro-apollo-plugin v1.1.4 h1:G4Dy/nQQMLvA7u7p/q7btQkarGsOtYVx7g4fGsuL4cw=
 github.com/xxxmicro/go-micro-apollo-plugin v1.1.4/go.mod h1:RUlvNaOFL5JMNL+oBUn/8jD5M2h3IVBp6X6r5bKoZng=
 github.com/ziutek/mymysql v1.5.4/go.mod h1:LMSpPZ6DbqWFxNCHW77HeMg9I646SAhApZ/wKdgO/C0=
 github.com/zouyx/agollo/v3 v3.0.1 h1:kV26O4zklg75tdzZoZstB8cg0wjemKkW9emNn03QUBM=
