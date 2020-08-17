@@ -2,6 +2,7 @@ package jaeger
 
 import(
 	"github.com/pkg/errors"
+	"github.com/micro/go-micro/v2/cli"
 	"github.com/micro/go-micro/v2/config"
 	xxxmicro_opentracing "github.com/xxxmicro/base/opentracing"
 	"github.com/opentracing/opentracing-go"
@@ -10,9 +11,16 @@ import(
 	jconfig "github.com/uber/jaeger-client-go/config"
 )
 
-func NewTracerProvider(config config.Config) (tracer opentracing.Tracer, err error) {
-	serviceName := config.Get("service", "name").String("service")
-
+func NewTracerProvider(c *cli.Context, config config.Config) (tracer opentracing.Tracer, err error) {
+	serviceName := config.Get("service", "name").String("")
+	if len(serverName) == 0 {
+		serverName = c.String("server_name")
+	}
+	
+	if len(serverName) == 0 {
+		serverName = "unamed"
+	}
+	
 	agentAddr := config.Get("jaeger", "agent", "addr").String("localhost:6831")
 	
 	metricsFactory := prometheus.New()
