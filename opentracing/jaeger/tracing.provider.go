@@ -2,7 +2,7 @@ package jaeger
 
 import(
 	"github.com/pkg/errors"
-	"github.com/micro/go-micro/v2/cli"
+	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2/config"
 	xxxmicro_opentracing "github.com/xxxmicro/base/opentracing"
 	"github.com/opentracing/opentracing-go"
@@ -16,7 +16,7 @@ func NewTracerProvider(c *cli.Context, config config.Config) (tracer opentracing
 	if len(serverName) == 0 {
 		serverName = c.String("server_name")
 	}
-	
+
 	if len(serverName) == 0 {
 		serverName = "unamed"
 	}
