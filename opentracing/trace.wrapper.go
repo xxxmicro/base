@@ -10,7 +10,7 @@ type tracerWrapper struct {
 
 var globalTracerWrapper = &tracerWrapper{opentracing.GlobalTracer()}
 
-func GlobalTracerWrapper() opentracing.Tracer {
+func GlobalTracerWrapper() *tracerWrapper {
 	return globalTracerWrapper
 }
 
