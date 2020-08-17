@@ -3,6 +3,7 @@ package jaeger
 import(
 	"github.com/pkg/errors"
 	"github.com/micro/go-micro/v2/config"
+	xxxmicro_opentracing "github.com/xxxmicro/opentracing"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-lib/metrics/prometheus"
@@ -37,5 +38,7 @@ func NewTracerProvider(config config.Config) (tracer opentracing.Tracer, err err
 
 	// 设置全局Tracer - 如果不设置将会导致上下文无法生成正确的Span
 	opentracing.SetGlobalTracer(tracer)
+	xxxmicro_opentracing.GlobalTracerWrapper().Wrap(tracer)
+
 	return
 }
