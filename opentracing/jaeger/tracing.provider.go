@@ -13,12 +13,12 @@ import(
 
 func NewTracerProvider(c *cli.Context, config config.Config) (tracer opentracing.Tracer, err error) {
 	serviceName := config.Get("service", "name").String("")
-	if len(serverName) == 0 {
-		serverName = c.String("server_name")
+	if len(serviceName) == 0 {
+		serviceName = c.String("server_name")
 	}
 
-	if len(serverName) == 0 {
-		serverName = "unamed"
+	if len(serviceName) == 0 {
+		serviceName = "unamed"
 	}
 	
 	agentAddr := config.Get("jaeger", "agent", "addr").String("localhost:6831")
