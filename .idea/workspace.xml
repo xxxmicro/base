@@ -21,6 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bd45dc2b-c208-4a14-9add-1370b7f3b83c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/domain/repository/gorm/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/repository/gorm/utils.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,8 +50,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="go.sdk" />
   </component>
-  <component name="RunManager" selected="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (4)">
-    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm (1)">
+    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="microbase" />
       <working_directory value="$PROJECT_DIR$/domain/repository/gorm" />
       <framework value="gotest" />
@@ -61,12 +62,12 @@
       <pattern value="^\QTestCrud\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCrud in github.com/xxxmicro/base/domain/repository/gorm" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="microbase" />
-      <working_directory value="$PROJECT_DIR$/domain/repository/mongo" />
+      <working_directory value="$PROJECT_DIR$/domain/repository/gorm" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="github.com/xxxmicro/base/domain/repository/mongo" />
+      <package value="github.com/xxxmicro/base/domain/repository/gorm" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <pattern value="^\QTestCrud\E$" />
@@ -107,11 +108,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm (1)" />
         <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (4)" />
         <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (3)" />
         <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (2)" />
         <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/gorm" />
-        <item itemvalue="Go Test.TestCrud in github.com/xxxmicro/base/domain/repository/mongo (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -135,50 +136,74 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1754" height="382" key="GridCell.Tab.0.bottom" timestamp="1597722702279">
-      <screen x="0" y="23" width="1680" height="965" />
+    <state width="1629" height="381" key="GridCell.Tab.0.bottom" timestamp="1597998641255">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.0.bottom/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038018" />
     <state width="1754" height="382" key="GridCell.Tab.0.bottom/0.23.1680.965@0.23.1680.965" timestamp="1597722702279" />
-    <state width="1754" height="382" key="GridCell.Tab.0.center" timestamp="1597722702279">
-      <screen x="0" y="23" width="1680" height="965" />
+    <state width="1629" height="381" key="GridCell.Tab.0.bottom/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998641255" />
+    <state width="1629" height="381" key="GridCell.Tab.0.center" timestamp="1597998641254">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.0.center/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038018" />
     <state width="1754" height="382" key="GridCell.Tab.0.center/0.23.1680.965@0.23.1680.965" timestamp="1597722702279" />
-    <state width="1754" height="382" key="GridCell.Tab.0.left" timestamp="1597722702278">
-      <screen x="0" y="23" width="1680" height="965" />
+    <state width="1629" height="381" key="GridCell.Tab.0.center/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998641254" />
+    <state width="1629" height="381" key="GridCell.Tab.0.left" timestamp="1597998641253">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.0.left/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038018" />
     <state width="1754" height="382" key="GridCell.Tab.0.left/0.23.1680.965@0.23.1680.965" timestamp="1597722702278" />
-    <state width="1754" height="382" key="GridCell.Tab.0.right" timestamp="1597722702279">
-      <screen x="0" y="23" width="1680" height="965" />
+    <state width="1629" height="381" key="GridCell.Tab.0.left/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998641253" />
+    <state width="1629" height="381" key="GridCell.Tab.0.right" timestamp="1597998641254">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.0.right/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038018" />
     <state width="1754" height="382" key="GridCell.Tab.0.right/0.23.1680.965@0.23.1680.965" timestamp="1597722702279" />
-    <state width="1480" height="240" key="GridCell.Tab.1.bottom" timestamp="1597614038019">
-      <screen x="0" y="23" width="1792" height="1046" />
+    <state width="1629" height="381" key="GridCell.Tab.0.right/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998641254" />
+    <state width="1629" height="381" key="GridCell.Tab.1.bottom" timestamp="1597998644522">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.1.bottom/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038019" />
-    <state width="1480" height="240" key="GridCell.Tab.1.center" timestamp="1597614038019">
-      <screen x="0" y="23" width="1792" height="1046" />
+    <state width="1629" height="381" key="GridCell.Tab.1.bottom/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998644522" />
+    <state width="1629" height="381" key="GridCell.Tab.1.center" timestamp="1597998644521">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.1.center/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038019" />
-    <state width="1480" height="240" key="GridCell.Tab.1.left" timestamp="1597614038018">
-      <screen x="0" y="23" width="1792" height="1046" />
+    <state width="1629" height="381" key="GridCell.Tab.1.center/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998644521" />
+    <state width="1629" height="381" key="GridCell.Tab.1.left" timestamp="1597998644520">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.1.left/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038018" />
-    <state width="1480" height="240" key="GridCell.Tab.1.right" timestamp="1597614038019">
-      <screen x="0" y="23" width="1792" height="1046" />
+    <state width="1629" height="381" key="GridCell.Tab.1.left/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998644520" />
+    <state width="1629" height="381" key="GridCell.Tab.1.right" timestamp="1597998644521">
+      <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state width="1480" height="240" key="GridCell.Tab.1.right/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597614038019" />
+    <state width="1629" height="381" key="GridCell.Tab.1.right/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998644521" />
     <state x="2126" y="213" key="SettingsEditor" timestamp="1597997925600">
       <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state x="2126" y="213" key="SettingsEditor/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597997925600" />
-    <state x="2491" y="186" width="863" height="996" key="find.popup" timestamp="1597778557269">
+    <state x="2491" y="186" width="863" height="996" key="find.popup" timestamp="1597998440739">
       <screen x="1680" y="-12" width="2560" height="1417" />
     </state>
     <state x="568" y="169" width="604" height="735" key="find.popup/-3440.63.3440.1417/0.23.1792.1046@0.23.1792.1046" timestamp="1597613746507" />
-    <state x="2491" y="186" width="863" height="996" key="find.popup/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597778557269" />
+    <state x="2491" y="186" width="863" height="996" key="find.popup/1680.-12.2560.1417/0.23.1680.964@1680.-12.2560.1417" timestamp="1597998440739" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/domain/repository/gorm/base.repository_test.go</url>
+          <line>172</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/domain/repository/gorm/utils.go</url>
+          <line>19</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

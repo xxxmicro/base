@@ -1,13 +1,12 @@
 package gorm
 
-import(
-	"fmt"
-	"strings"
+import (
 	"errors"
-	"time"
+	"fmt"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/domain/model"
 	"github.com/xxxmicro/base/types/smarttime"
+	"time"
 )
 
 var (
@@ -16,15 +15,13 @@ var (
 
 // 约定 name为小写
 func FindField(name string, ms *_gorm.ModelStruct, dbHandler *_gorm.DB) (*_gorm.StructField, bool) {
-	name = strings.ToLower(name)
-
 	tableName := ms.TableName(dbHandler)
 	fieldsMap := fieldsCache[tableName]
 	if fieldsMap == nil {
 		fieldsMap = make(map[string]*_gorm.StructField)
 
 		for _, field := range ms.StructFields {
-			fieldName := strings.ToLower(field.Name)
+			fieldName := field.Tag.Get("json")
 			fieldsMap[fieldName] = field
 		}
 

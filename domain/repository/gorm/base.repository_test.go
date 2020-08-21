@@ -7,6 +7,7 @@ import (
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/memory"
+	"github.com/micro/go-micro/v2/logger"
 	"github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/xxxmicro/base/database/gorm"
@@ -60,7 +61,7 @@ func getConfig() (config.Config, error) {
 func getDB(config config.Config) (*_gorm.DB, error) {
 	db, err := gorm.NewDbProvider(config)
 	if err != nil {
-		log.Panic("数据库连接失败")
+		logger.Fatal("数据库连接失败")
 		return nil, err
 	}
 	
@@ -81,7 +82,7 @@ func TestCrud(t *testing.T) {
 	}
 
 	db.AutoMigrate(&User{})
-	log.Info("创建数据表完毕")
+	logger.Info("创建数据表完毕")
 
 
 	userRepo := NewBaseRepository(db)
@@ -109,7 +110,7 @@ func TestCrud(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		log.Info("插入记录成功")
+		logger.Info("插入记录成功")
 	}
 
 	user3 := &User{
@@ -144,7 +145,7 @@ func TestCrud(t *testing.T) {
 		if assert.Error(err) {
 			t.Fatal(err)
 		}
-		log.Info("选择更新成功")
+		logger.Info("选择更新成功")
 	}
 
 	{
@@ -153,7 +154,7 @@ func TestCrud(t *testing.T) {
 		if assert.Error(err) {
 			t.Fatal(err)
 		}
-		log.Info("找到对应记录")
+		logger.Info("找到对应记录")
 	}
 
 	{
@@ -175,15 +176,15 @@ func TestCrud(t *testing.T) {
 		}
 
 		if assert.Equal(1, total) {
-			log.Info("翻页查询正确")
+			logger.Info("翻页查询正确")
 		} else {
-			log.Info(fmt.Sprintf("翻页查询错误, 期望1条记录，实际返回%d条", total))
+			logger.Info(fmt.Sprintf("翻页查询错误, 期望1条记录，实际返回%d条", total))
 		}
 
 		if assert.Equal(1, pageCount) {
-			log.Info("翻页查询正确")
+			logger.Info("翻页查询正确")
 		} else {
-			log.Info(fmt.Sprintf("翻页查询错误 期望1页, 实际返回%d页", pageCount))
+			logger.Info(fmt.Sprintf("翻页查询错误 期望1页, 实际返回%d页", pageCount))
 		}
 
 		b, _ := json.Marshal(items)
@@ -213,22 +214,22 @@ func TestCrud(t *testing.T) {
 		}
 
 		if assert.Equal(2, len(items)) {
-			log.Info("游标查询正确")
+			logger.Info("游标查询正确")
 		} else {
-			log.Info(fmt.Sprintf("游标查询错误 期望1条, 实际返回%d条", len(items)))
+			logger.Info(fmt.Sprintf("游标查询错误 期望1条, 实际返回%d条", len(items)))
 		}
 
 		b, _ := json.Marshal(items)
 		s := string(b)
 		t.Log(s)
 		t.Log(extra)
-		log.Info("游标查询成功")
+		logger.Info("游标查询成功")
 	}
 
 	{
 		err := userRepo.Delete(context.Background(), &User{ID: user1.ID})
 		assert.NoError(err)
-		log.Info("删除记录成功")
+		logger.Info("删除记录成功")
 
 		items := make([]*User, 0)
 		total, pageCount, err := userRepo.Page(context.Background(), &User{}, &model.PageQuery{
@@ -245,7 +246,7 @@ func TestCrud(t *testing.T) {
 
 		err = userRepo.Delete(context.Background(), &User{ID: user2.ID})
 		err = userRepo.Delete(context.Background(), &User{ID: user3.ID})
-		log.Info("删除记录成功")
+		logger.Info("删除记录成功")
 
 		items = make([]*User, 0)
 		total, pageCount, err = userRepo.Page(context.Background(), &User{}, &model.PageQuery{
@@ -257,6 +258,6 @@ func TestCrud(t *testing.T) {
 		assert.Equal(t, 0, total)
 		assert.Equal(t, 0, pageCount)
 	
-		log.Info("翻页核对成功")
+		logger.Info("翻页核对成功")
 	}
 }
