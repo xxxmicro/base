@@ -20,7 +20,7 @@ func NewSourceProvider(c *cli.Context) source.Source {
 	 	return nil
 	}
 		
-	namespace := c.String("namespace")
+	namespace := c.String("apollo_namespace")
 	if len(namespace) == 0 {
  		namespace = config.Env("APOLLO_NAMESPACE", "application")
 	}
