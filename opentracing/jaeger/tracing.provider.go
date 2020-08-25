@@ -10,19 +10,25 @@ import (
 	jconfig "github.com/uber/jaeger-client-go/config"
 	"github.com/uber/jaeger-lib/metrics/prometheus"
 	xxxmicro_opentracing "github.com/xxxmicro/base/opentracing"
+	"os"
 )
 
 func NewTracerProvider(c *cli.Context, config config.Config) (tracer opentracing.Tracer, err error) {
-	serviceName := config.Get("service", "name").String("")
+	serviceName := os.Getenv("JAEGER_SERVICE_NAME")
+	if len(serviceName) == 0 {
+		config.Get("service", "name").String("")
+	}
 	if len(serviceName) == 0 {
 		serviceName = c.String("server_name")
 	}
 
-	if len(serviceName) == 0 {
-		serviceName = "unamed"
+	agentAddr := os.Getenv("JAEGER_ADDR")
+	if len(agentAddr) == 0 {
+		agentAddr = c.String("AgentAddr")
 	}
-
-	agentAddr := config.Get("jaeger", "agent", "addr").String("localhost:6831")
+	if len(agentAddr) == 0 {
+		agentAddr = config.Get("jaeger", "agent", "addr").String("localhost:6831")
+	}
 
 	metricsFactory := prometheus.New()
 

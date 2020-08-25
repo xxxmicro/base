@@ -11,21 +11,21 @@ import (
 	breflect "github.com/xxxmicro/base/reflect"
 )
 
-type baseRepository struct {
+type BaseRepository struct {
 	db *_gorm.DB
 }
 
 func NewBaseRepository(db *_gorm.DB) repository.BaseRepository {
-	return &baseRepository{ db }
+	return &BaseRepository{db}
 }
 
-func (r *baseRepository) Create(c context.Context, m model.Model) error {
+func (r *BaseRepository) Create(c context.Context, m model.Model) error {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
 	return db.Create(m).Error
 }
 
-func (r *baseRepository) Upsert(c context.Context, m model.Model) (*repository.ChangeInfo, error) {
+func (r *BaseRepository) Upsert(c context.Context, m model.Model) (*repository.ChangeInfo, error) {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
 	result := db.Save(m)
@@ -39,7 +39,7 @@ func (r *baseRepository) Upsert(c context.Context, m model.Model) (*repository.C
 	return change, nil
 }
 
-func (r *baseRepository) Update(c context.Context, m model.Model, data interface{}) error {
+func (r *BaseRepository) Update(c context.Context, m model.Model, data interface{}) error {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
 	// 主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
@@ -51,17 +51,16 @@ func (r *baseRepository) Update(c context.Context, m model.Model, data interface
 	return db.Model(m).Update(data).Error
 }
 
-
-func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
+func (r *BaseRepository) FindOne(c context.Context, m model.Model) error {
 	db := opentracing.SetSpanToGorm(c, r.db)
 
 	return db.Where(m.Unique()).Take(m).Error
 }
 
-func (r *baseRepository) Delete(c context.Context, m model.Model) error {
+func (r *BaseRepository) Delete(c context.Context, m model.Model) error {
 	// 主键保护，如果 m 什么都没设置，这里将会删除表的所有记录
 	ms := r.db.NewScope(m).GetModelStruct()
-	for _, pf := range ms.PrimaryFields {		
+	for _, pf := range ms.PrimaryFields {
 		value, err := breflect.GetStructField(m, pf.Name)
 		if err != nil {
 			return err
@@ -71,12 +70,11 @@ func (r *baseRepository) Delete(c context.Context, m model.Model) error {
 			return errors.New(fmt.Sprintf("primary key %s must set for delete", pf.Name))
 		}
 	}
-	
+
 	return r.db.Delete(m).Error
 }
 
-
-func (r *baseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error){
+func (r *BaseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error) {
 	// items := breflect.MakeSlicePtr(m, 0, 0)
 	ms := r.db.NewScope(m).GetModelStruct()
 
@@ -92,11 +90,11 @@ func (r *baseRepository) Page(c context.Context, m model.Model, query *model.Pag
 	}
 
 	total, pageCount, err = pageQuery(dbHandler, query.PageNo, query.PageSize, resultPtr)
-	
+
 	return
 }
 
-func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
+func (r *BaseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
 	ms := r.db.NewScope(m).GetModelStruct()
 
 	dbHandler := r.db.Model(m)
@@ -131,7 +129,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 			err = errors.New("field not found")
 			return
 		}
-		
+
 		minCursor, err = breflect.GetStructField(minItem, field.Name)
 		if err != nil {
 			return
