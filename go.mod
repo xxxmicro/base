@@ -14,6 +14,7 @@ require (
 	github.com/micro/go-micro/v3 v3.0.0-alpha
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/petersunbag/coven v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
