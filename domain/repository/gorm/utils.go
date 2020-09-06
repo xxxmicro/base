@@ -1,13 +1,12 @@
 package gorm
 
-import(
-	"fmt"
-	"strings"
+import (
 	"errors"
-	"time"
+	"fmt"
 	_gorm "github.com/jinzhu/gorm"
 	"github.com/xxxmicro/base/domain/model"
 	"github.com/xxxmicro/base/types/smarttime"
+	"time"
 )
 
 var (
@@ -16,15 +15,13 @@ var (
 
 // 约定 name为小写
 func FindField(name string, ms *_gorm.ModelStruct, dbHandler *_gorm.DB) (*_gorm.StructField, bool) {
-	name = strings.ToLower(name)
-
 	tableName := ms.TableName(dbHandler)
 	fieldsMap := fieldsCache[tableName]
 	if fieldsMap == nil {
 		fieldsMap = make(map[string]*_gorm.StructField)
 
 		for _, field := range ms.StructFields {
-			fieldName := strings.ToLower(field.Name)
+			fieldName := field.Tag.Get("json")
 			fieldsMap[fieldName] = field
 		}
 
@@ -79,6 +76,8 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 				return nil, err
 			}
 
+			fieldName := field.DBName
+
 			vMap, ok := value.(map[string]interface{})
 			if !ok {
 				switch field.Struct.Type.String() {
@@ -89,7 +88,7 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 					}	
 				}
 			
-				return db.Where(fmt.Sprintf("%s = ?", key), value), nil
+				return db.Where(fmt.Sprintf("%s = ?", fieldName), value), nil
 			}
 
 			for vKey, vValue := range vMap {
@@ -104,33 +103,33 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 				filterType = model.FilterType(vKey)
 				switch filterType {
 				case model.FilterType_EQ:
-					return db.Where(fmt.Sprintf("%s = ?", key), vValue), nil
+					return db.Where(fmt.Sprintf("%s = ?", fieldName), vValue), nil
 				case model.FilterType_NE:
-					return db.Where(fmt.Sprintf("%s != ?", key), vValue), nil
+					return db.Where(fmt.Sprintf("%s != ?", fieldName), vValue), nil
 				case model.FilterType_GT:
-					return db.Where(fmt.Sprintf("%s > ?", key), vValue), nil
+					return db.Where(fmt.Sprintf("%s > ?", fieldName), vValue), nil
 				case model.FilterType_GTE:
-					return db.Where(fmt.Sprintf("%s >= ?", key), vValue), nil	
+					return db.Where(fmt.Sprintf("%s >= ?", fieldName), vValue), nil
 				case model.FilterType_LT:
-					return db.Where(fmt.Sprintf("%s < ?", key), vValue), nil	
+					return db.Where(fmt.Sprintf("%s < ?", fieldName), vValue), nil
 				case model.FilterType_LTE:
-					return db.Where(fmt.Sprintf("%s <= ?", key), vValue), nil	
+					return db.Where(fmt.Sprintf("%s <= ?", fieldName), vValue), nil
 				case model.FilterType_LIKE:
-					return db.Where(fmt.Sprintf("%s LIKE ?", key), vValue), nil
+					return db.Where(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
 				case model.FilterType_MATCH:
-					return db.Where(fmt.Sprintf("%s LIKE ?", key), vValue), nil
+					return db.Where(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
 				case model.FilterType_NOT_LIKE:
-					return db.Not(fmt.Sprintf("%s LIKE ?", key), vValue), nil
+					return db.Not(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
 				case model.FilterType_IN:
-					return gormFilterIn(db, key, vValue)
+					return gormFilterIn(db, fieldName, vValue)
 				case model.FilterType_NOT_IN:
-					return gormFilterNotIn(db, key, vValue)
+					return gormFilterNotIn(db, fieldName, vValue)
 				case model.FilterType_BETWEEN:
-					return gormFilterBetween(db, key, vValue)
+					return gormFilterBetween(db, fieldName, vValue)
 				case model.FilterType_IS_NULL:
-					return db.Where(fmt.Sprintf("%s IS NULL", key)), nil
+					return db.Where(fmt.Sprintf("%s IS NULL", fieldName)), nil
 				case model.FilterType_NOT_NULL:
-					return db.Where(fmt.Sprintf("%s IS NOT NULL", key)), nil
+					return db.Where(fmt.Sprintf("%s IS NOT NULL", fieldName)), nil
 				}
 			}
 		}
@@ -185,7 +184,8 @@ func buildSort(dbHandler *_gorm.DB, ms *_gorm.ModelStruct, sorts []*model.SortSp
 
 	for _, sort := range sorts {
 		sortKey := sort.Property
-		if _, ok := FindField(sortKey, ms, dbHandler); !ok {
+		field, ok := FindField(sortKey, ms, dbHandler)
+		if !ok {
 			err = errors.New(fmt.Sprintf("unknown field: %s", sortKey))
 			return
 		}
@@ -197,7 +197,7 @@ func buildSort(dbHandler *_gorm.DB, ms *_gorm.ModelStruct, sorts []*model.SortSp
 			sortDir = "asc"
 		}
 
-		db = dbHandler.Order(fmt.Sprintf("%s %s", sortKey, sortDir))
+		db = dbHandler.Order(fmt.Sprintf("%s %s", field.DBName, sortDir))
 	}
 
 	return
