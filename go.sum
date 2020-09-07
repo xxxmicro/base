@@ -434,6 +434,7 @@ github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415/go.mod h1:
 github.com/xeipuuv/gojsonschema v0.0.0-20180618132009-1d523034197f/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4myDekKRoLuqhs=
 github.com/xeipuuv/gojsonschema v1.1.0/go.mod h1:5yf86TLmAcydyeJq5YvxkGPE2fm/u4myDekKRoLuqhs=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
+github.com/xxl-job/go-client v0.0.4/go.mod h1:drWrCHorYqmdRVVoEZpY8ML/rcp7FJy+ouC6p3K2iEo=
 github.com/xxl-job/go-client v0.0.5 h1:i/MPejFbqDpamojkyUPvOjl8/7p66uPW+vIcyYWNkgY=
 github.com/xxl-job/go-client v0.0.5/go.mod h1:drWrCHorYqmdRVVoEZpY8ML/rcp7FJy+ouC6p3K2iEo=
 github.com/xxxmicro/go-micro-apollo-plugin v1.1.4 h1:G4Dy/nQQMLvA7u7p/q7btQkarGsOtYVx7g4fGsuL4cw=
