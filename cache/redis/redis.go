@@ -10,7 +10,7 @@ import(
 	"encoding/json"
 )
 
-type redisCache struct {
+type RedisCache struct {
 	options cache.Options
 	r *redis.Pool
 }
@@ -24,12 +24,12 @@ func NewCache(opts ...cache.Option) cache.Cache {
 		o(&options)
 	}
 
-	return &redisCache{
+	return &RedisCache{
 		options: options,
 	}
 }
 
-func (m *redisCache) Init(opts ...cache.Option) error {
+func (m *RedisCache) Init(opts ...cache.Option) error {
 	for _, o := range opts {
 		o(&m.options)
 	}
@@ -42,11 +42,11 @@ func (m *redisCache) Init(opts ...cache.Option) error {
 	return nil
 }
 
-func (m *redisCache) Options() cache.Options {
+func (m *RedisCache) Options() cache.Options {
 	return m.options
 }
 
-func (m *redisCache) connect() (*redis.Pool, error) {
+func (m *RedisCache) connect() (*redis.Pool, error) {
 	addrs := m.options.Context.Value(addrsKey{}).([]string)
 	if len(addrs) == 0 {
 		addrs = []string{":6379"}
@@ -80,15 +80,15 @@ func (m *redisCache) connect() (*redis.Pool, error) {
 	return pool, nil
 }
 
-func (m *redisCache) prefix(key string) string {
+func (m *RedisCache) prefix(key string) string {
 	return fmt.Sprintf("%s:%s", m.options.Prefix, key)
 }
 
-func (m *redisCache) String() string {
+func (m *RedisCache) String() string {
 	return "redis"
 }
 
-func (m *redisCache) Get(key string, resultPtr interface{}, opts ...cache.ReadOption) error {
+func (m *RedisCache) Get(key string, resultPtr interface{}, opts ...cache.ReadOption) error {
 	readOpts := cache.ReadOptions{}
 	for _, o := range opts {
 		o(&readOpts)
@@ -106,7 +106,7 @@ func (m *redisCache) Get(key string, resultPtr interface{}, opts ...cache.ReadOp
 	return json.Unmarshal(data, resultPtr)
 }
 
-func (m *redisCache) Set(key string, value interface{}, opts ...cache.WriteOption) error {
+func (m *RedisCache) Set(key string, value interface{}, opts ...cache.WriteOption) error {
 	writeOpts := cache.WriteOptions{}
 	for _, o := range opts {
 		o(&writeOpts)
@@ -130,11 +130,11 @@ func (m *redisCache) Set(key string, value interface{}, opts ...cache.WriteOptio
 	return err
 }
 
-func (m *redisCache) Close() error {
+func (m *RedisCache) Close() error {
 	return m.r.Close()
 }
 
-func (m *redisCache) Delete(key string, opts ...cache.DeleteOption) error {
+func (m *RedisCache) Delete(key string, opts ...cache.DeleteOption) error {
 	deleteOptions := cache.DeleteOptions{}
 	for _, o := range opts {
 		o(&deleteOptions)
