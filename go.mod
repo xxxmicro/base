@@ -16,6 +16,7 @@ require (
 	github.com/micro/go-micro/v2 v2.9.1
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/petersunbag/coven v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.4.0
