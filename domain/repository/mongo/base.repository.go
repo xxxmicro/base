@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+
 	"github.com/xxxmicro/base/database/mongo"
 	"github.com/xxxmicro/base/domain/model"
 	"github.com/xxxmicro/base/domain/repository"
@@ -11,18 +13,17 @@ import (
 	breflect "github.com/xxxmicro/base/reflect"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"reflect"
 )
 
-type baseRepository struct {
+type BaseRepository struct {
 	db *mongo.DB
 }
 
-func NewBaseRepository(db *mongo.DB) repository.BaseRepository {
-	return &baseRepository{ db }
+func NewBaseRepository(db *mongo.DB) *BaseRepository {
+	return &BaseRepository{db}
 }
 
-func (r *baseRepository) Create(c context.Context, m model.Model) error {
+func (r *BaseRepository) Create(c context.Context, m model.Model) error {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
@@ -36,7 +37,7 @@ func (r *baseRepository) Create(c context.Context, m model.Model) error {
 	})
 }
 
-func (r *baseRepository) Upsert(c context.Context, m model.Model) (changeInfo *repository.ChangeInfo, err error) {
+func (r *BaseRepository) Upsert(c context.Context, m model.Model) (changeInfo *repository.ChangeInfo, err error) {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
@@ -51,9 +52,9 @@ func (r *baseRepository) Upsert(c context.Context, m model.Model) (changeInfo *r
 		}
 
 		changeInfo = &repository.ChangeInfo{
-			Updated: change.Updated,
-			Removed: change.Removed,
-			Matched: change.Matched,
+			Updated:    change.Updated,
+			Removed:    change.Removed,
+			Matched:    change.Matched,
 			UpsertedId: change.UpsertedId,
 		}
 		return nil
@@ -61,7 +62,7 @@ func (r *baseRepository) Upsert(c context.Context, m model.Model) (changeInfo *r
 	return
 }
 
-func (r *baseRepository) Update(c context.Context, m model.Model, change interface{}) error {
+func (r *BaseRepository) Update(c context.Context, m model.Model, change interface{}) error {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
@@ -75,37 +76,37 @@ func (r *baseRepository) Update(c context.Context, m model.Model, change interfa
 	})
 }
 
-func (r *baseRepository) FindOne(c context.Context, m model.Model) error {
+func (r *BaseRepository) FindOne(c context.Context, m model.Model) error {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-	
+
 	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
 		return c.Find(m.Unique()).One(m)
 	})
 }
 
-func (r *baseRepository) Delete(c context.Context, m model.Model) error {
+func (r *BaseRepository) Delete(c context.Context, m model.Model) error {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return err
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-	
+
 	return Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
 		return c.Remove(m.Unique())
 	})
 }
 
-func (r *baseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error){
+func (r *BaseRepository) Page(c context.Context, m model.Model, query *model.PageQuery, resultPtr interface{}) (total int, pageCount int, err error) {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
 	}
 	collection := TheNamingStrategy.Table(ms.Name)
-	
+
 	filters, err := buildQuery(ms, query.Filters)
 	if err != nil {
 		return
@@ -115,7 +116,7 @@ func (r *baseRepository) Page(c context.Context, m model.Model, query *model.Pag
 	if err != nil {
 		return
 	}
-	
+
 	err = Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
 		total, err = c.Find(filters).Count()
 		if err != nil {
@@ -134,7 +135,7 @@ func (r *baseRepository) Page(c context.Context, m model.Model, query *model.Pag
 		offset := (pageNo - 1) * pageSize
 
 		pageCount = total / pageSize
-		if total % pageSize != 0 {
+		if total%pageSize != 0 {
 			pageCount++
 		}
 
@@ -144,7 +145,7 @@ func (r *baseRepository) Page(c context.Context, m model.Model, query *model.Pag
 	return
 }
 
-func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
+func (r *BaseRepository) Cursor(c context.Context, query *model.CursorQuery, m model.Model, resultPtr interface{}) (extra *model.CursorExtra, err error) {
 	ms, err := reflect2.GetStructInfo(m, nil)
 	if err != nil {
 		return
@@ -165,7 +166,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 	cursorFilter, sort, reverse, err := mongoCursorFilter(ms, query)
 	if err != nil {
 		return
-	}	
+	}
 
 	filters = bson.M{"$and": []bson.M{cursorFilter, filters}}
 
@@ -184,7 +185,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 	if err != nil {
 		return
 	}
-	
+
 	var minCursor interface{} = nil
 	var maxCursor interface{} = nil
 
@@ -193,16 +194,15 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 		if reverse {
 			breflect.SlicePtrReverse(resultPtr)
 		}
-		
-		minCursorModel := breflect.SlicePtrIndexOf(resultPtr, 0)
 
+		minCursorModel := breflect.SlicePtrIndexOf(resultPtr, 0)
 
 		minCursor, err = breflect.GetStructField(minCursorModel, cursorProp.Name)
 		if err != nil {
 			return
 		}
 
-		maxCursorModel := breflect.SlicePtrIndexOf(resultPtr, count - 1)
+		maxCursorModel := breflect.SlicePtrIndexOf(resultPtr, count-1)
 		maxCursor, err = breflect.GetStructField(maxCursorModel, cursorProp.Name)
 		if err != nil {
 			return
@@ -220,7 +220,7 @@ func (r *baseRepository) Cursor(c context.Context, query *model.CursorQuery, m m
 	return
 }
 
-func (r *baseRepository) EnsureIndexes(m Indexed) (err error) {
+func (r *BaseRepository) EnsureIndexes(m Indexed) (err error) {
 	collection := TheNamingStrategy.Table(reflect.TypeOf(m).Elem().Name())
 
 	err = Execute(r.db.Session, r.db.Name, collection, func(c *mgo.Collection) error {
