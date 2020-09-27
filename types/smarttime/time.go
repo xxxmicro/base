@@ -1,11 +1,11 @@
 package smarttime
 
-import(
-	"time"
+import (
 	"bytes"
 	"encoding/json"
-	"strconv"
 	"errors"
+	"strconv"
+	"time"
 	// "reflect"
 )
 
@@ -21,19 +21,19 @@ func Parse(data interface{}) (Time, error) {
 	case int:
 		timestamp := int64(i)
 		sec := timestamp / 1000
-		nano := (timestamp % 1000) * 1e6	
+		nano := (timestamp % 1000) * 1e6
 		t := time.Unix(sec, nano)
 		return Time(t), nil
 	case int32:
 		timestamp := int64(i)
 		sec := timestamp / 1000
-		nano := (timestamp % 1000) * 1e6	
+		nano := (timestamp % 1000) * 1e6
 		t := time.Unix(sec, nano)
 		return Time(t), nil
 	case int64:
 		timestamp := int64(i)
 		sec := timestamp / 1000
-		nano := (timestamp % 1000) * 1e6	
+		nano := (timestamp % 1000) * 1e6
 		t := time.Unix(sec, nano)
 		return Time(t), nil
 	case string:
@@ -47,7 +47,7 @@ func Parse(data interface{}) (Time, error) {
 			return Time(t), nil
 		} else {
 			sec := timestamp / 1000
-			nano := (timestamp % 1000) * 1e6	
+			nano := (timestamp % 1000) * 1e6
 			t = time.Unix(sec, nano)
 			return Time(t), nil
 		}
@@ -57,20 +57,19 @@ func Parse(data interface{}) (Time, error) {
 }
 
 func (self *Time) UnmarshalJSON(data []byte) error {
-	var timeStr string
+	var timeVal int64
 	decoder := json.NewDecoder(bytes.NewReader(data))
-	// decoder.UseNumber()
-	if err := decoder.Decode(&timeStr); err != nil {
+	if err := decoder.Decode(&timeVal); err != nil {
 		return err
 	}
 
 	var err error
-	*self, err = Parse(timeStr)
+	*self, err = Parse(timeVal)
 	return err
 }
 
-func (self Time) MarshalJSON() ([]byte, error) {
-	t := time.Time(self)
+func (self *Time) MarshalJSON() ([]byte, error) {
+	t := time.Time(*self)
 	timestamp := t.UnixNano() / 1e6
 	if timestamp <= 0 {
 		timestamp = 0

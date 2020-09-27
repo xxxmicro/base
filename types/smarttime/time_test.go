@@ -1,14 +1,16 @@
 package smarttime_test
 
-import(
+import (
+	"encoding/json"
 	"testing"
 	"time"
+
 	"github.com/xxxmicro/base/types/smarttime"
 )
 
 type User struct {
-	ID string				`json:"id"`
-	Ctime smarttime.Time			`json:"ctime"`
+	ID    string         `json:"id"`
+	Ctime smarttime.Time `json:"ctime"`
 }
 
 func TestSmartTime(t *testing.T) {
@@ -25,4 +27,21 @@ func TestSmartTime(t *testing.T) {
 		return
 	}
 	t.Logf("ctime: %s", time.Time(user.Ctime).Format("2006-01-02 15:04"))
+}
+
+func TestSmartTimeJson(t *testing.T) {
+	user := &User{}
+
+	v, err := json.Marshal(user)
+	if err != nil {
+		t.Errorf("marshall error: %+v", err)
+	}
+
+	t.Logf("marshall result: %s", string(v))
+
+	if err = json.Unmarshal(v, user); err != nil {
+		t.Errorf("unmarshall error: %+v", err)
+	}
+
+	t.Logf("unmarshall result: %+v", user)
 }
