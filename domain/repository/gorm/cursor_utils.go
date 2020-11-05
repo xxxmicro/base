@@ -36,17 +36,17 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 		{
 			if query.Direction == 0 {
 				// 游标前
-				orderBy = fmt.Sprintf("%s %s", sortKey, "ASC")
+				orderBy = fmt.Sprintf("`%s` %s", sortKey, "ASC")
 				reverse = true
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
+					queryHandler = queryHandler.Where(fmt.Sprintf("`%s` > ?", sortKey), value)
 				}
 			} else {
 				// 游标后
-				orderBy = fmt.Sprintf("%s %s", sortKey, "DESC")
+				orderBy = fmt.Sprintf("`%s` %s", sortKey, "DESC")
 				reverse = false
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
+					queryHandler = queryHandler.Where(fmt.Sprintf("`%s` > ?", sortKey), value)
 				}
 			}
 		}
@@ -54,17 +54,17 @@ func gormCursorFilter(queryHandler *_gorm.DB, ms *_gorm.ModelStruct, query *mode
 		{
 			if query.Direction == 0 {
 				// 游标前
-				orderBy = fmt.Sprintf("%s %s", sortKey, "DESC")
+				orderBy = fmt.Sprintf("`%s` %s", sortKey, "DESC")
 				reverse = true
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
+					queryHandler = queryHandler.Where(fmt.Sprintf("`%s` > ?", sortKey), value)
 				}
 			} else {
 				// 游标后
-				orderBy = fmt.Sprintf("%s %s", sortKey, "ASC")
+				orderBy = fmt.Sprintf("`%s` %s", sortKey, "ASC")
 				reverse = false
 				if query.Cursor != nil {
-					queryHandler = queryHandler.Where(fmt.Sprintf("%s > ?", sortKey), value)
+					queryHandler = queryHandler.Where(fmt.Sprintf("`%s` > ?", sortKey), value)
 				}
 			}
 		}
