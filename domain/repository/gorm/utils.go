@@ -88,7 +88,7 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 					}	
 				}
 			
-				return db.Where(fmt.Sprintf("%s = ?", fieldName), value), nil
+				return db.Where(fmt.Sprintf("`%s` = ?", fieldName), value), nil
 			}
 
 			for vKey, vValue := range vMap {
@@ -103,23 +103,23 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 				filterType = model.FilterType(vKey)
 				switch filterType {
 				case model.FilterType_EQ:
-					return db.Where(fmt.Sprintf("%s = ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` = ?", fieldName), vValue), nil
 				case model.FilterType_NE:
-					return db.Where(fmt.Sprintf("%s != ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` != ?", fieldName), vValue), nil
 				case model.FilterType_GT:
-					return db.Where(fmt.Sprintf("%s > ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` > ?", fieldName), vValue), nil
 				case model.FilterType_GTE:
-					return db.Where(fmt.Sprintf("%s >= ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` >= ?", fieldName), vValue), nil
 				case model.FilterType_LT:
-					return db.Where(fmt.Sprintf("%s < ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` < ?", fieldName), vValue), nil
 				case model.FilterType_LTE:
-					return db.Where(fmt.Sprintf("%s <= ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` <= ?", fieldName), vValue), nil
 				case model.FilterType_LIKE:
-					return db.Where(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` LIKE ?", fieldName), vValue), nil
 				case model.FilterType_MATCH:
-					return db.Where(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
+					return db.Where(fmt.Sprintf("`%s` LIKE ?", fieldName), vValue), nil
 				case model.FilterType_NOT_LIKE:
-					return db.Not(fmt.Sprintf("%s LIKE ?", fieldName), vValue), nil
+					return db.Not(fmt.Sprintf("`%s` LIKE ?", fieldName), vValue), nil
 				case model.FilterType_IN:
 					return gormFilterIn(db, fieldName, vValue)
 				case model.FilterType_NOT_IN:
@@ -127,9 +127,9 @@ func gormFilter(db *_gorm.DB, ms *_gorm.ModelStruct, key string, value interface
 				case model.FilterType_BETWEEN:
 					return gormFilterBetween(db, fieldName, vValue)
 				case model.FilterType_IS_NULL:
-					return db.Where(fmt.Sprintf("%s IS NULL", fieldName)), nil
+					return db.Where(fmt.Sprintf("`%s` IS NULL", fieldName)), nil
 				case model.FilterType_NOT_NULL:
-					return db.Where(fmt.Sprintf("%s IS NOT NULL", fieldName)), nil
+					return db.Where(fmt.Sprintf("`%s` IS NOT NULL", fieldName)), nil
 				}
 			}
 		}
@@ -144,7 +144,7 @@ func gormFilterIn(db *_gorm.DB, key string, value interface{}) (*_gorm.DB, error
 		return nil, ErrFilterValueType
 	}
 
-	return db.Where(fmt.Sprintf("%s IN (?)", key), values), nil
+	return db.Where(fmt.Sprintf("`%s` IN (?)", key), values), nil
 }
 
 func gormFilterNotIn(db *_gorm.DB, key string, value interface{}) (*_gorm.DB, error) {
@@ -153,7 +153,7 @@ func gormFilterNotIn(db *_gorm.DB, key string, value interface{}) (*_gorm.DB, er
 		return nil, ErrFilterValueType
 	}
 
-	return db.Where(fmt.Sprintf("%s NOT IN (?)", key), values), nil
+	return db.Where(fmt.Sprintf("`%s` NOT IN (?)", key), values), nil
 }
 
 func gormFilterBetween(db *_gorm.DB, key string, value interface{}) (*_gorm.DB, error) {
@@ -165,11 +165,11 @@ func gormFilterBetween(db *_gorm.DB, key string, value interface{}) (*_gorm.DB, 
 		return nil, ErrFilterValueSize
 	}
 	if values[0] != nil && values[1] != nil {
-		return db.Where(fmt.Sprintf("%s between ? and ?", key), values[0], values[1]), nil
+		return db.Where(fmt.Sprintf("`%s` between ? and ?", key), values[0], values[1]), nil
 	} else if values[0] != nil && values[1] == nil {
-		return db.Where(fmt.Sprintf("%s >= ?", key), values[0]), nil
+		return db.Where(fmt.Sprintf("`%s` >= ?", key), values[0]), nil
 	} else if values[0] == nil && values[1] != nil {
-		return db.Where(fmt.Sprintf("%s <= ?", key), values[1]), nil
+		return db.Where(fmt.Sprintf("`%s` <= ?", key), values[1]), nil
 	} else {
 		return db, nil
 	}
@@ -197,7 +197,7 @@ func buildSort(dbHandler *_gorm.DB, ms *_gorm.ModelStruct, sorts []*model.SortSp
 			sortDir = "asc"
 		}
 
-		db = dbHandler.Order(fmt.Sprintf("%s %s", field.DBName, sortDir))
+		db = dbHandler.Order(fmt.Sprintf("`%s` %s", field.DBName, sortDir))
 	}
 
 	return
