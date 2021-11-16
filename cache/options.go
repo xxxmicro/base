@@ -7,7 +7,7 @@ import (
 
 type Options struct {
 	Context context.Context
-	Prefix string
+	Prefix  string
 }
 
 type Option func(o *Options)
@@ -29,9 +29,7 @@ func WriteExpiry(t time.Duration) WriteOption {
 	}
 }
 
-
 type DeleteOptions struct {
-
 }
 
 type DeleteOption func(o *DeleteOptions)
